@@ -1,0 +1,20 @@
+[flake8]
+max-line-length = 88
+extend-ignore = E203, E704, W503, E501 # Line break before binary operator (Black prefers this)
+
+# Exclude directories that don't need checking
+exclude =
+    .git,
+    __pycache__,
+    build,
+    dist,
+    venv,
+    migrations/
+
+# Ignore specific errors in specific files
+per-file-ignores =
+    __init__.py: F401
+    tests/*: S101  # Ignore assert statements in tests
+
+# Set a reasonable complexity limit for functions
+max-complexity = 10
