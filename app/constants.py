@@ -21,6 +21,10 @@ LLM_MODEL = "llama-3.3-70b-versatile"
 LLM_TEMPERATURE = 0
 LLM_API_KEY = os.getenv("GROQ_API_KEY")
 
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+PROJECT_ROOT = os.path.dirname(SCRIPT_DIR)
+CHROMA_PATH = os.path.join(PROJECT_ROOT, "chroma_db")
+
 
 def get_llm():
     """Get configured LLM instance."""
