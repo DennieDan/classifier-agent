@@ -1,4 +1,5 @@
 import os
+import time
 
 import chromadb
 from constants import CHROMA_PATH
@@ -12,8 +13,9 @@ from llama_index.vector_stores.chroma import ChromaVectorStore
 load_dotenv()
 
 # Same LLM and embed model as index_server.py
-# Settings.llm = Ollama(model="llama3.3", request_timeout=200)
-Settings.llm = Groq(model="llama-3.3-70b-versatile", api_key=os.getenv("GROQ_API_KEY"))
+start_time = time.time()
+Settings.llm = Ollama(model="llama3.1:8b-instruct-q8_0", request_timeout=1000)
+# Settings.llm = Groq(model="llama-3.3-70b-versatile", api_key=os.getenv("GROQ_API_KEY"))
 Settings.embed_model = HuggingFaceEmbedding(
     model_name="sentence-transformers/all-MiniLM-L6-v2"
 )
@@ -22,7 +24,7 @@ Settings.embed_model = HuggingFaceEmbedding(
 print(CHROMA_PATH)
 chroma_client = chromadb.PersistentClient(path=CHROMA_PATH)
 chroma_collection = chroma_client.get_collection(
-    "web_collection"
+    "stcced_collection"
 )  # Use get_collection, not get_or_create
 
 if chroma_collection.count() == 0:
@@ -37,5 +39,7 @@ else:
     index = VectorStoreIndex.from_vector_store(vector_store=vector_store)
 
     query_engine = index.as_query_engine()
-    response = query_engine.query("What is title of the document?")
+    response = query_engine.query("What is the HS-Code of personal deodorant?")
     print(response)
+    end_time = time.time()
+    print(f"Time taken: {end_time - start_time} seconds")
