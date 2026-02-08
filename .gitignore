@@ -41,6 +41,9 @@ env/
 *.swp
 *.swo
 
+# Logs
+log.txt
+
 # Testing / coverage
 .pytest_cache/
 .coverage

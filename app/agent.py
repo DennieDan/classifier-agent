@@ -1,10 +1,23 @@
 import json
+import logging
 import re
 from typing import TypedDict
 
 from constants import get_llm
-from langgraph.graph import END, StateGraph
 from prompts.classifier_prompt import CLASSIFIER_PROMPT
+
+# Configure logging to log.txt
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(message)s",
+    handlers=[
+        logging.FileHandler("log.txt"),
+        logging.StreamHandler(),
+    ],
+)
+logger = logging.getLogger(__name__)
+
+from langgraph.graph import END, StateGraph
 
 
 def parse_classifier_response(content: str) -> tuple[str, float, str]:
@@ -61,7 +74,7 @@ def supervisor_agent(state: AgentState):
     The Supervisor: Analyzes the input and decides which worker to call.
     In a complex system, this would use an LLM to choose between multiple workers.
     """
-    print(f"\n[Supervisor] Analyzing request: '{state['user_input']}'")
+    logger.info("[Supervisor] Analyzing request: '%s'", state["user_input"])
 
     # Simple Logic: If it looks like a classification task, send to Classifier.
     # In a real system, this is where the LLM decides routing.
@@ -75,7 +88,7 @@ def classifier_worker(state: AgentState):
     """
     The Worker: Performs the specific task (Classification).
     """
-    print(f"[Worker] Classifying item...")
+    logger.info("[Worker] Classifying item...")
 
     item = state["user_input"].lower()
 
@@ -86,8 +99,8 @@ def classifier_worker(state: AgentState):
     content = response.content if hasattr(response, "content") else str(response)
     result, conf, thought_process = parse_classifier_response(content)
 
-    print(f"[Worker] Thought process: {thought_process}...")
-    print(f"[Worker] Result found: {result} (conf: {conf})")
+    logger.info("[Worker] Thought process: %s...", thought_process)
+    logger.info("[Worker] Result found: %s (conf: %s)", result, conf)
     return {
         "classification": result,
         "confidence": conf,
