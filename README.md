@@ -8,5 +8,24 @@ docker run -p 8000:8000 --name classifier-agent classifier-agent
 
 Prompt for worker: explain to them
 
-- HS-Code is Harmonized System Code so that they do not need to search.
+- HS-Code is Harmonized System Code so that they do need to search.
 - Ask it to give thought process.
+
+* Exactly the same
+  Personal deodorant
+  Radiator panels
+
+* High ambiguity
+
+Supervisor:
+
+- Only return 1 result
+  - Among all possibilities return by the search agent, give the (score for each + explanation) -> as feedback and choose the best one
+  - Compare it with the threshold: if low then give the whole feedback to the search agent
+- need to identify the main feature of it
+  **The Overlap**: "Modular solar-powered IoT sensors for agricultural moisture tracking.
+  " (Is
+  it 8541 Solar or 9025 Sensors?)
+  -> it is 9025 because its main feature is meter
+  **The Vague Input**: "High-grade industrial polymers for medical 3D printing." (Requires autonomous recursive search for chemical composition).
+  **The Multi-Component**: "Electric vehicle charging station with integrated advertising LED display."

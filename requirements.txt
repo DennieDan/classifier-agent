@@ -6,6 +6,7 @@ python-dotenv==1.2.1
 # LLM and AI
 groq==0.37.1
 langchain-groq==1.1.2
+langchain-core==1.2.9
 langgraph==1.0.8
 
 chromadb==1.4.1
