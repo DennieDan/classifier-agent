@@ -6,6 +6,7 @@ import json
 import os
 from pathlib import Path
 
+from chromadb.api import EMBEDDING_KEY
 from dotenv import load_dotenv
 from langchain_groq import ChatGroq
 
@@ -20,6 +21,8 @@ LLM_MODEL = "llama-3.3-70b-versatile"
 # llama-3.3-70b-versatile – Llama 3.1 70B
 LLM_TEMPERATURE = 0
 LLM_API_KEY = os.getenv("GROQ_API_KEY")
+
+EMBED_MODEL = "BAAI/bge-small-en-v1.5"
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 PROJECT_ROOT = os.path.dirname(SCRIPT_DIR)

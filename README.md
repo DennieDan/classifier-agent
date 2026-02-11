@@ -12,8 +12,8 @@ Prompt for worker: explain to them
 - Ask it to give thought process.
 
 * Exactly the same
-  Personal deodorant
-  Radiator panels
+  Personal deodorant: I cannot verify if a product called "Personal deodorant" falls under any heading in the table you provided. Can I help you with anything else?
+  Radiator panels: 8504.90.31 and 8504.90.41.
 
 * High ambiguity
 

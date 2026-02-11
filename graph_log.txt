@@ -1,135 +1,66 @@
-2026-02-08 22:35:36,269 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
-2026-02-08 22:35:36,271 - INFO - Retrying request to /chat/completions in 0.493147 seconds
-2026-02-08 22:35:37,424 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
-2026-02-08 22:35:37,425 - INFO - Retrying request to /chat/completions in 0.874033 seconds
-2026-02-08 22:35:38,528 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
-2026-02-08 22:38:19,684 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
-2026-02-08 22:38:19,943 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
-2026-02-08 22:40:08,322 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
-2026-02-08 22:40:08,590 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
-2026-02-08 22:48:52,774 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
-2026-02-08 22:48:53,039 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
-2026-02-09 20:03:58,488 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
-2026-02-09 20:03:58,859 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
-2026-02-09 20:03:59,184 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
-2026-02-09 20:10:45,900 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
-2026-02-09 20:10:45,917 - INFO - 
---- [Search Agent] Searching for: Radiator panels ---
-2026-02-09 20:10:45,918 - INFO - 
---- [Search Agent] Final Answer: I found some general info about 'Radiator panels', but I am not certain about the specific HS-Code. ---
-2026-02-09 20:10:46,170 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
-2026-02-09 20:10:46,173 - INFO - 
---- [Search Agent] Searching for: Radiator panels ---
-2026-02-09 20:10:46,174 - INFO - 
---- [Search Agent] Final Answer: Based on recursive search with feedback 'Search recursively using: alternative product name...': HS-Code 8418.90 (Parts of furnaces, radiators) applies to radiator panels. ---
-2026-02-09 20:10:46,449 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
-2026-02-09 20:12:09,300 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
-2026-02-09 20:12:09,320 - INFO - 
---- [Search Agent] Searching for: Radiator panels ---
-2026-02-09 20:12:09,327 - INFO - Load pretrained SentenceTransformer: sentence-transformers/all-MiniLM-L6-v2
-2026-02-09 20:12:12,729 - INFO - Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
-2026-02-09 20:12:13,059 - INFO - HTTP Request: POST http://localhost:11434/api/show "HTTP/1.1 200 OK"
-2026-02-09 20:13:09,830 - INFO - HTTP Request: POST http://localhost:11434/api/chat "HTTP/1.1 200 OK"
-2026-02-09 20:13:09,851 - INFO - 
---- [Search Agent] Final Answer: None ---
-2026-02-09 22:26:06,141 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
-2026-02-09 22:26:06,160 - INFO - 
---- [Search Agent] Searching for: Radiator panels ---
-2026-02-09 22:26:06,162 - INFO - Load pretrained SentenceTransformer: sentence-transformers/all-MiniLM-L6-v2
-2026-02-09 22:26:09,681 - INFO - Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
-2026-02-09 22:26:09,948 - INFO - HTTP Request: POST http://localhost:11434/api/show "HTTP/1.1 200 OK"
-2026-02-09 22:26:59,622 - INFO - HTTP Request: POST http://localhost:11434/api/chat "HTTP/1.1 200 OK"
-2026-02-09 22:26:59,702 - INFO - 
---- [Search Agent] Final Answer: Aluminium spacers for doors and windows. ---
-2026-02-09 22:27:00,172 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
-2026-02-09 22:27:00,182 - INFO - 
---- [Search Agent] Searching for: Aluminium spacers for doors and windows ---
-2026-02-09 22:27:00,203 - INFO - Load pretrained SentenceTransformer: sentence-transformers/all-MiniLM-L6-v2
-2026-02-09 22:27:04,752 - INFO - HTTP Request: POST http://localhost:11434/api/show "HTTP/1.1 200 OK"
-2026-02-09 22:27:24,495 - INFO - HTTP Request: POST http://localhost:11434/api/chat "HTTP/1.1 200 OK"
-2026-02-09 22:27:24,505 - INFO - 
---- [Search Agent] Final Answer: 7604.21.20 ---
-2026-02-09 22:27:24,981 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
-2026-02-09 22:32:01,500 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
-2026-02-09 22:32:01,511 - INFO - 
---- [Search Agent] Searching for: Radiator panels ---
-2026-02-09 22:32:01,512 - INFO - Load pretrained SentenceTransformer: sentence-transformers/all-MiniLM-L6-v2
-2026-02-09 22:32:05,146 - INFO - Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
-2026-02-09 22:32:05,439 - INFO - HTTP Request: POST http://localhost:11434/api/show "HTTP/1.1 200 OK"
-2026-02-09 22:32:39,228 - INFO - HTTP Request: POST http://localhost:11434/api/chat "HTTP/1.1 200 OK"
-2026-02-09 22:32:39,240 - INFO - 
---- [Search Agent] Final Answer: 8538.10.12 ---
-2026-02-09 22:32:39,527 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
-2026-02-09 22:38:37,946 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
-2026-02-09 22:38:37,957 - INFO - 
---- [Search Agent] Searching for: Radiator panels ---
-2026-02-09 22:38:37,959 - INFO - Load pretrained SentenceTransformer: sentence-transformers/all-MiniLM-L6-v2
-2026-02-09 22:38:41,480 - INFO - Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
-2026-02-09 22:38:41,772 - INFO - HTTP Request: POST http://localhost:11434/api/show "HTTP/1.1 200 OK"
-2026-02-09 22:39:31,095 - INFO - HTTP Request: POST http://localhost:11434/api/chat "HTTP/1.1 200 OK"
-2026-02-09 22:39:31,122 - INFO - 
---- [Search Agent] Final Answer: Unfortunately, I cannot provide a specific HS-Code for "Radiator panels" based on the given context information.
-
-However, I can suggest that the Harmonized Commodity Description and Coding System Nomenclature (HS) has a hierarchical structure consisting of six digits, with each digit representing a level of specificity. 
-
-To find the HS-code, you may need to consult the relevant documentation or classification tables that categorize goods into specific categories based on their characteristics.
-
-Here's an example of how the classification might look like for "Radiator panels":
-
-HS-Code: 7321.90 (or possibly other codes depending on further specification)
-Classification details:
-	* Chapter 73: Articles of iron or steel
-		+ Heading 7321: Radiators and spaces heaters, including thermostats, not capable of being dissociated
-
-Please note that this is a hypothetical example and the actual HS-code may differ based on the specific characteristics and classification rules applied to "Radiator panels" in the AHTN 2022. ---
-2026-02-09 22:39:31,620 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
-2026-02-09 22:39:31,627 - INFO - 
---- [Search Agent] Searching for: Radiator panels ---
-2026-02-09 22:39:31,631 - INFO - Load pretrained SentenceTransformer: sentence-transformers/all-MiniLM-L6-v2
-2026-02-09 22:39:35,491 - INFO - HTTP Request: POST http://localhost:11434/api/show "HTTP/1.1 200 OK"
-2026-02-09 22:40:28,986 - INFO - HTTP Request: POST http://localhost:11434/api/chat "HTTP/1.1 200 OK"
-2026-02-09 22:40:28,997 - INFO - 
---- [Search Agent] Final Answer: After conducting a recursive search using alternative product names, broader category terms, and technical synonyms, I found a potential HS-code match for "Radiator panels".
-
-The closest classification seems to be in the section related to "Radiators" and "Heating equipment". Specifically:
-
-**8516.60.90 - Other NMB (Numerical Brackets)**
-
-This subheading refers to other electro-thermic appliances, which could potentially include radiator panels as a component or a part of a larger heating system.
-
-However, it's essential to note that the Harmonized Commodity Description and Coding System (HS) is a complex classification system, and more precise information may be required to determine the exact HS-code for "Radiator panels".
-
-Considering the provided guidance, I recommend further investigation into this subheading and its potential subclasses or related categories. ---
-2026-02-09 22:40:29,580 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
-2026-02-09 22:40:29,587 - INFO - 
---- [Search Agent] Searching for: Radiator panels ---
-2026-02-09 22:40:29,592 - INFO - Load pretrained SentenceTransformer: sentence-transformers/all-MiniLM-L6-v2
-2026-02-09 22:40:33,575 - INFO - HTTP Request: POST http://localhost:11434/api/show "HTTP/1.1 200 OK"
-2026-02-09 22:41:42,488 - INFO - HTTP Request: POST http://localhost:11434/api/chat "HTTP/1.1 200 OK"
-2026-02-09 22:41:42,499 - INFO - 
---- [Search Agent] Final Answer: After a recursive search using various techniques, I found a potential match for "Radiator panels" in the provided context.
-
-A possible classification is:
-
-* Heading 84.51 (Machinery for the heat-treatment of textile yarns, fabrics or made up textile articles) does not cover this product
-* However, I found that Chapter 84 (Nuclear reactors, boilers, machinery and mechanical appliances; parts thereof) has a specific note regarding radiators.
-* In Note 1 to Chapter 84, it's mentioned that "Radiators for the articles of Section XVII" are excluded from classification. 
-* Given this information, I looked for alternative classifications within the same chapter.
-
-A possible match is:
-
-* Heading 8418 (Parts suitable for use solely or principally with machine-tools of heading 84.56 to 84.65)
-
-However, this does not seem to be a direct match for "Radiator panels". 
-
-Upon further examination, I found that radiators are often classified under Chapter 73 (Articles of iron or steel), particularly in the context of heating and cooling systems.
-
-A potential HS-Code match is:
-
-* Heading 7308 (Radiators and space heaters, not electric, and parts thereof)
-
-This classification fits within the broader category of machinery and mechanical appliances. The code may also encompass radiator panels as a component part.
-
-Please note that this is the best match I could find using the provided context and recursive search techniques. However, without more specific product information or technical specifications, it's challenging to determine a precise HS-Code classification for "Radiator panels". ---
-2026-02-09 22:41:43,001 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
-2026-02-09 22:41:43,014 - INFO - Total time taken: 185.3939208984375 seconds
+2026-02-11 16:38:07,058 - INFO - Load pretrained SentenceTransformer: BAAI/bge-small-en-v1.5
+2026-02-11 16:38:11,245 - INFO - 1 prompt is loaded, with the key: query
+2026-02-11 16:38:11,265 - INFO - Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+2026-02-11 16:38:12,031 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-11 16:38:12,048 - INFO - 
+--- [Supervisor] Confidence: 80.0% | Decision: search_agent ---
+2026-02-11 16:38:12,616 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-11 16:38:12,618 - INFO - --- [Search Agent] Result: HS-Code 1509.10.10, Chapter Notes: The heading 1509 includes olive oil and its fractions, whether or not refined, but does not include olives or olive pomace. Virgin olive oil is defined as oil extracted from the fruit of the olive tree, solely by mechanical or other physical means under conditions that do not lead to alterations in the oil. Confidence score: 0.92... ---
+2026-02-11 16:38:13,169 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-11 16:38:13,934 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-11 16:38:13,936 - INFO - 
+--- [Supervisor] Confidence: 92.0% | Decision: FINISH ---
+2026-02-11 16:41:11,811 - INFO - Load pretrained SentenceTransformer: BAAI/bge-small-en-v1.5
+2026-02-11 16:41:16,009 - INFO - 1 prompt is loaded, with the key: query
+2026-02-11 16:41:16,026 - INFO - Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+2026-02-11 16:41:16,751 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-11 16:41:16,770 - INFO - 
+--- [Supervisor] Confidence: 80.0% | Decision: search_agent ---
+2026-02-11 16:41:17,360 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-11 16:41:17,361 - INFO - --- [Search Agent] Result: The HS-Code for Beet Sugar is 1701.12.1000. This code is found in Chapter 17 of the Harmonized System, which covers sugars and sugar confectionery. The heading 1701 specifically covers cane or beet sugar and chemically pure sucrose, in solid form. The subheading 1701.12 covers beet sugar, and the further subheading 1701.12.10 covers beet sugar without added flavouring or colouring, with the final subheading 1701.12.1000 specifying beet sugar in a solid form.... ---
+2026-02-11 16:41:18,002 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-11 16:41:18,329 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-11 16:41:18,332 - INFO - 
+--- [Supervisor] Confidence: 100.0% | Decision: FINISH ---
+2026-02-11 16:43:40,466 - INFO - Load pretrained SentenceTransformer: BAAI/bge-small-en-v1.5
+2026-02-11 16:43:44,749 - INFO - 1 prompt is loaded, with the key: query
+2026-02-11 16:43:44,758 - INFO - Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+2026-02-11 16:43:45,669 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-11 16:43:45,686 - INFO - 
+--- [Supervisor] Confidence: 50.0% | Decision: search_agent ---
+2026-02-11 16:43:46,036 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-11 16:43:46,039 - INFO - --- [Search Agent] Result: The HS-Code for Chewing Gum is 1704.90, as it falls under the category of sugar confectionery, specifically other sugar confectionery, including chewing gum, in Chapter 17 of the Harmonized System codes.... ---
+2026-02-11 16:43:46,466 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-11 16:43:46,995 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-11 16:43:46,998 - INFO - 
+--- [Supervisor] Confidence: 100.0% | Decision: FINISH ---
+2026-02-11 16:46:15,379 - INFO - Load pretrained SentenceTransformer: BAAI/bge-small-en-v1.5
+2026-02-11 16:46:21,601 - INFO - 1 prompt is loaded, with the key: query
+2026-02-11 16:46:21,613 - INFO - Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+2026-02-11 16:46:22,558 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-11 16:46:22,575 - INFO - 
+--- [Supervisor] Confidence: 80.0% | Decision: search_agent ---
+2026-02-11 16:46:22,968 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-11 16:46:22,969 - INFO - --- [Search Agent] Result: Based on the supervisor's instructions, I will check Chapter 18 of the HS-Code manual. The correct HS-Code for cocoa powder is 1805.00. This code is for 'Cocoa powder, not containing added sugar or other sweetening matter'.... ---
+2026-02-11 16:46:23,418 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-11 16:46:23,841 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-11 16:46:23,844 - INFO - 
+--- [Supervisor] Confidence: 100.0% | Decision: FINISH ---
+2026-02-11 16:52:37,854 - INFO - Load pretrained SentenceTransformer: BAAI/bge-small-en-v1.5
+2026-02-11 16:52:41,786 - INFO - 1 prompt is loaded, with the key: query
+2026-02-11 16:52:41,799 - INFO - Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+2026-02-11 16:52:42,671 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-11 16:52:42,688 - INFO - 
+--- [Supervisor] Confidence: 0.0% | Decision: search_agent ---
+2026-02-11 16:52:43,283 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-11 16:52:43,284 - INFO - --- [Search Agent] Result: The HS-Code of pasta is 1902.11.0000, 1902.19.0000, 1902.20.0000, 1902.30.0000, 1902.40.0000, as these codes cover various types of pasta under Chapter 19 of the Harmonized System, which includes preparations of cereals, flour, starch or milk; pastrycooks' products. The correct code depends on the specific type of pasta, such as spaghetti, macaroni, or other types.... ---
+2026-02-11 16:52:44,294 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-11 16:52:45,079 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-11 16:52:45,082 - INFO - 
+--- [Supervisor] Confidence: 80.0% | Decision: search_agent ---
+2026-02-11 16:52:45,639 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-11 16:52:45,642 - INFO - --- [Search Agent] Result: The HS-Code of pasta is 1902.11.0000, 1902.19.0000, 1902.20.0000, 1902.30.0000, 1902.40.0000, as these codes cover various types of pasta under Chapter 19 of the Harmonized System, which includes preparations of cereals, flour, starch or milk; pastrycooks' products. The correct code depends on the specific type of pasta, such as spaghetti, macaroni, or other types. However, since the confidence score is not >= 0.9, we need to refine the search and check the notes and rules under Chapter 19 to determine the most appropriate code for pasta in general, or to see if there's a more general code that covers all types of pasta.... ---
+2026-02-11 16:52:47,072 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-11 16:52:48,506 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-11 16:52:48,509 - INFO - 
+--- [Supervisor] Confidence: 90.0% | Decision: FINISH ---
