@@ -14,7 +14,7 @@ The possible HS-Codes for virgin olive oil are:
 
 3. Although not explicitly stated in the given information, it's possible that some HS-Codes for blends or fractions might also encompass virgin olive oil; however, they are not listed here as they're less specific.
 """
-user_input = "What is the HS-Code of Pasta?"
+user_input = "What is the HS-Code of Electric vehicle charging station with integrated advertising LED display?"
 graph = AgentGraph()
 result = graph.app.invoke(
     {

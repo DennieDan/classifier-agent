@@ -8,7 +8,6 @@ from constants import get_llm
 from index_query import IndexQuery
 from langchain_core.messages import BaseMessage, HumanMessage, SystemMessage
 from langgraph.graph import END, START, StateGraph
-from prompts.evaluate_prompt import EVALUATE_PROMPT
 from prompts.search_prompt import SEARCH_PROMPT
 from prompts.supervisor_prompt import SUPERVISOR_PROMPT
 from pydantic import BaseModel, Field
@@ -114,7 +113,7 @@ class AgentGraph:
                 }
             )
             if evaluation:
-                print(
+                logger.info(
                     f"\n--- [Supervisor] Search Results Evaluation: {json.dumps(evaluation.evaluation, indent=4)} ---"
                 )
 
@@ -137,7 +136,7 @@ class AgentGraph:
         logger.info(
             f"\n--- [Supervisor] Confidence: {response.confidence*100}% | Decision: {response.next_action} ---"
         )
-        print(f"\n--- [Supervisor] Feedback/Reasoning: {response.feedback} ---")
+        logger.info(f"\n--- [Supervisor] Feedback/Reasoning: {response.feedback} ---")
 
         if response.next_action == "FINISH":
             return {
