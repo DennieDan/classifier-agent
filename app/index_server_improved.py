@@ -66,6 +66,9 @@ print(f"Index built in {end_time - start_time:.2f} seconds")
 
 # similarity_top_k: return the top k results, not just the best match
 query_engine = index.as_query_engine()
-response = query_engine.query("What are ALL the General Interpretative Rules (GIR)?")
+# response = query_engine.query("What are ALL the General Interpretative Rules (GIR)?")
+response = query_engine.query(
+    "The user input mentions 'solar-powered', 'IoT sensors', and 'agricultural moisture tracking'. This suggests the item is a type of monitoring device. However, without further information or search results to evaluate, it's unclear which specific HS-Code applies. Check Chapter 85 Notes regarding 'monitors' vs 'static converters' to find the correct HS-Code."
+)
 print("\n--- Response ---")
 print(response)

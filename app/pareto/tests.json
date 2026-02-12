@@ -1,0 +1,49 @@
+[
+  {
+    "vars": {
+      "trade_description": "Modular solar-powered IoT sensors for agricultural moisture tracking.",
+      "ideal_chapter": "90",
+      "ambiguity_type": "The Overlap"
+    },
+    "asserts": [
+      {
+        "type": "javascript",
+        "value": "output.includes('9025') || output.includes('8541')"
+      },
+      {
+        "type": "llm-rubric",
+        "value": "The agent must decide if it is 8541 Solar or 9025 Sensors based on the essential character rule."
+      }
+    ]
+  },
+  {
+    "vars": {
+      "trade_description": "High-grade industrial polymers for medical 3D printing.",
+      "ideal_chapter": "39",
+      "ambiguity_type": "The Vague Input"
+    },
+    "asserts": [
+      {
+        "type": "llm-rubric",
+        "value": "The agent must perform a recursive search to determine chemical composition before choosing a code in Chapter 39."
+      }
+    ]
+  },
+  {
+    "vars": {
+      "trade_description": "Electric vehicle charging station with integrated advertising LED display.",
+      "ideal_chapter": "85",
+      "ambiguity_type": "The Multi-Component"
+    },
+    "asserts": [
+      {
+        "type": "icontains",
+        "value": "8504"
+      },
+      {
+        "type": "llm-rubric",
+        "value": "The agent must identify the charging function (8504) as the essential character over the LED display (8528)."
+      }
+    ]
+  }
+]

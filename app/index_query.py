@@ -29,6 +29,8 @@ class IndexQuery:
             client=self.ollama_http,
         )
         self.embed_model = HuggingFaceEmbedding(model_name=EMBED_MODEL)
+        # Use same embed model as index build so query embedding dimension matches collection (e.g. 384).
+        Settings.embed_model = self.embed_model
         self.chroma_client = chromadb.PersistentClient(path=CHROMA_PATH)
         self.chroma_collection = self.chroma_client.get_collection("stcced_improved")
 

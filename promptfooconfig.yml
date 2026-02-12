@@ -1,0 +1,35 @@
+# 1. Define the prompts to be tested
+prompts:
+  - "Classify this trade item: {{trade_description}}"
+
+# 2. Define the 'Providers' (The models you are benchmarking)
+# Uses app/pareto/providers.py; run from repo root with PYTHONPATH=app so imports resolve.
+providers:
+  # Cloud LLM: GPT-4o (The 95% Accuracy target)
+  # - id: "file://app/pareto/providers.py:cloud_groq_llama_3_3_70b_versatile"
+  #   label: "Cloud: Groq Llama 3.3 70B Versatile"
+  - id: "file://app/pareto/providers.py:local_llama_3_1_8b_instruct_q8_0"
+    label: "Local: Llama 3.1 8B Instruct Q8.0"
+
+# 3. Load your High-Ambiguity Test Set
+tests: app/pareto/tests.json
+
+# 4. Define Global Assertions (The Grader)
+# This is where we integrate DeepEval/Ragas-style metrics
+defaultTest:
+  assert:
+    # Metric 1: Latency Benchmark (< 60s)
+    - type: latency
+      threshold: 100000
+
+    # Metric 2: DeepEval Faithfulness (Did it hallucinate?)
+    # - type: deepeval
+    #   value: faithfulness
+    #   threshold: 0.9
+
+    # Metric 3: Answer relevance (single-turn; avoids grader JSON parse errors)
+    # - type: answer-relevance
+    #   threshold: 0.9
+
+# 5. Output Settings
+sharing: true

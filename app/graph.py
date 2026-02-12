@@ -4,16 +4,19 @@ import operator
 import time
 from typing import Annotated, Dict, List, Literal, TypedDict, Union
 
-from constants import get_llm
 from index_query import IndexQuery
+from langchain_core.language_models import BaseChatModel
 from langchain_core.messages import BaseMessage, HumanMessage, SystemMessage
 from langgraph.graph import END, START, StateGraph
 from prompts.search_prompt import SEARCH_PROMPT
 from prompts.supervisor_prompt import SUPERVISOR_PROMPT
 from pydantic import BaseModel, Field
-from tools.agent_tools import evaluate_search_results
+from tools.agent_tools import (
+    evaluate_search_results,
+    get_best_confidence_score_and_compare_with_threshold,
+)
 
-# Configure logging
+# Configure logging (set to logging.WARNING to turn off info logs)
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s - %(levelname)s - %(message)s",
@@ -63,20 +66,26 @@ class SupervisorDecision(BaseModel):
     )
 
 
+class SearchQuery(BaseModel):
+    """Query to run against the index. Use supervisor instructions and user input to form a precise query."""
+
+    query: str = Field(
+        description="The search query to run against the classification database (e.g. HS code for a product)."
+    )
+
+
 class SearchAgentDecision(BaseModel):
     search_results: str = Field(
         description="Possible responses from the search agent and reasoning for each possible response"
     )
 
 
-llm = get_llm()
-
 # --- 3. Define Nodes ---
 
 
 class AgentGraph:
-    def __init__(self):
-        self.llm = get_llm()
+    def __init__(self, llm: BaseChatModel):
+        self.llm = llm
         self.index_query = IndexQuery()
         self.workflow = StateGraph(AgentState)
 
@@ -105,6 +114,7 @@ class AgentGraph:
         search_results = state.get("search_results", "")
         evaluation = None
 
+        threshold_met = None
         if search_results:
             evaluation = evaluate_search_results.invoke(
                 {
@@ -117,20 +127,32 @@ class AgentGraph:
                     f"\n--- [Supervisor] Search Results Evaluation: {json.dumps(evaluation.evaluation, indent=4)} ---"
                 )
 
-        # Update System Prompt to include the Retrieved Rules
+        # Build tool descriptions for the prompt
+        _supervisor_tools = [
+            get_best_confidence_score_and_compare_with_threshold,
+        ]
+        tools_description = "\n".join(
+            f"- **{t.name}**: {t.description}" for t in _supervisor_tools
+        )
+
+        # Update System Prompt to include the Retrieved Rules and tool descriptions
         # This is the "Context Injection" pattern
+        threshold_line = (
+            f"Threshold comparison (best confidence strictly > 0.9): {threshold_met}"
+            if threshold_met is not None
+            else "N/A (no search results to evaluate)"
+        )
         dynamic_system_prompt = f"""
-        {SUPERVISOR_PROMPT}
+        {SUPERVISOR_PROMPT.format(tools=tools_description)}
         
         === CURRENT SEARCH STATUS ===
         User Input: {messages[0].content}
         Latest Worker Finding: {search_results}
         Search Results Evaluation: {json.dumps(evaluation.evaluation, indent=4) if evaluation else "N/A"}
+        {threshold_line}
         """
 
-        structured_llm = llm.with_structured_output(SupervisorDecision)
-
-        # We invoke with the System Prompt (Context) + User Messages (Task)
+        structured_llm = self.llm.with_structured_output(SupervisorDecision)
         response = structured_llm.invoke([SystemMessage(content=dynamic_system_prompt)])
 
         logger.info(
@@ -155,7 +177,7 @@ class AgentGraph:
 
     def search_agent_node(self, state: AgentState):
         """
-        Search Agent: Fetches specific product details.
+        Search Agent: Uses index_query as a tool to fetch from the index, then formats the result as SearchAgentDecision.
         """
         messages = state["messages"]
         instructions = state.get("instructions", "")
@@ -167,15 +189,23 @@ class AgentGraph:
             supervisor_instructions=instructions,
         )
 
-        structured_llm = llm.with_structured_output(SearchAgentDecision)
-        response = structured_llm.invoke(prompt)
+        retrieval_result = self.index_query.index_query(query=prompt)
+        logger.info(f"--- [Search Agent] Retrieval Result: {retrieval_result} ---")
 
-        logger.info(
-            f"--- [Search Agent] Result: {response.search_results}... ---"
-        )  # Log first 100 chars
+        #         prompt_with_results = f"""{prompt}
+
+        # === RETRIEVAL RESULT FROM DATABASE ===
+        # {retrieval_result}
+        # === END RETRIEVAL RESULT ===
+
+        # Based on the retrieval result above, provide possible responses (e.g. HS-Code and classification details) and reasoning for each."""
+        #         structured_llm = self.llm.with_structured_output(SearchAgentDecision)
+        #         response = structured_llm.invoke([HumanMessage(content=prompt_with_results)])
+
+        #         logger.info(f"--- [Search Agent] Result: {response}")
 
         return {
-            "search_results": response.search_results,
+            "search_results": retrieval_result,
             "next_action": "supervisor",
         }
 

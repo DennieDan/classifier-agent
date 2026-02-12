@@ -27,3 +27,14 @@ def evaluate_search_results(
         EVALUATE_PROMPT.format(input=input, search_results=search_results)
     )
     return response
+
+
+@tool
+def get_best_confidence_score_and_compare_with_threshold(
+    confidence_score: List[float],
+) -> bool:
+    """
+    Get the best confidence score and compare it with the threshold.
+    """
+    best_confidence_score = max(confidence_score)
+    return best_confidence_score > 0.9
