@@ -7,9 +7,9 @@ fastmcp==2.14.5
 # LLM and AI
 groq==0.37.1
 langchain-groq==1.1.2
-langchain-core==1.2.9
+langchain-core==1.2.12
 langchain-ollama==1.0.1
-langchain-openai==0.3.8
+langchain-openai==1.1.9
 langchain-mcp-adapters==0.2.1
 langgraph==1.0.8
 langgraph-checkpoint-sqlite==3.0.3
