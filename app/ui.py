@@ -4,6 +4,7 @@ import asyncio
 import json
 import uuid
 
+from constants import MODEL_PAIRS
 from db import (
     delete_conversation,
     get_conversation,
@@ -46,7 +47,9 @@ def _truncate_name(name: str) -> str:
 
 
 def _refresh_sidebar() -> None:
-    if conversation_list_container is None or not _client_still_valid(conversation_list_container):
+    if conversation_list_container is None or not _client_still_valid(
+        conversation_list_container
+    ):
         return
     try:
         conversation_list_container.clear()
@@ -72,6 +75,9 @@ def _on_select_conversation(permit_id: int) -> None:
     _show_conversation_view(permit_id)
 
 
+# All unique model ids from MODEL_PAIRS (order preserved)
+MODEL_OPTIONS = list(dict.fromkeys(m for _, m in MODEL_PAIRS))
+
 # Map UI host label to agent ReactGraph host argument
 HOST_TO_AGENT = {
     "Cloud Groq": "cloud groq",
@@ -93,15 +99,6 @@ def _show_input_view() -> None:
                 "text-lg text-gray-600"
             )
             with ui.row().classes("w-full gap-4 items-center"):
-                model_select = (
-                    ui.select(
-                        options=["llama-3.3-70b-versatile"],
-                        value="llama-3.3-70b-versatile",
-                        label="Model",
-                    )
-                    .classes("min-w-48")
-                    .props("outlined dense")
-                )
                 host_select = (
                     ui.select(
                         options=["Cloud Groq", "Local", "Cloud OpenAI"],
@@ -111,6 +108,25 @@ def _show_input_view() -> None:
                     .classes("min-w-40")
                     .props("outlined dense")
                 )
+                model_select = (
+                    ui.select(
+                        options=MODEL_OPTIONS,
+                        value=MODEL_OPTIONS[0] if MODEL_OPTIONS else None,
+                        label="Model",
+                    )
+                    .classes("min-w-48")
+                    .props("outlined dense")
+                )
+
+            with ui.card().classes("w-full p-3 bg-blue-50 border border-blue-200"):
+                ui.label(
+                    "Current Supporting Models — please only choose these combinations:"
+                ).classes("text-sm font-medium text-gray-700")
+                with ui.column().classes("w-full mt-2 gap-1"):
+                    for host_label, model_id in MODEL_PAIRS:
+                        ui.label(f"• {host_label}: {model_id}").classes(
+                            "text-sm text-gray-600"
+                        )
             inp = (
                 ui.input(placeholder="Type here...").classes("w-full").props("outlined")
             )
