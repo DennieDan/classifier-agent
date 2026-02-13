@@ -3,8 +3,8 @@
 import json
 import uuid
 
-from constants import MODEL_PAIRS
-from db import (
+from app.constants import MODEL_PAIRS
+from app.db import (
     delete_conversation,
     get_conversation,
     get_messages_snapshot,
@@ -15,7 +15,7 @@ from db import (
     update_name,
     update_response,
 )
-from message_components import render_message_cards
+from app.message_components import render_message_cards
 from nicegui import background_tasks, ui
 
 # State
@@ -333,6 +333,17 @@ def run_ui(port: int = 8080, title: str = "Classifier Agent") -> None:
     init_db()
     _build_ui()
     ui.run(port=port, title=title, reload=False)
+
+
+def run_ui_with(fastapi_app, *, mount_path: str = "/ui") -> None:
+    """Mount the NiceGUI UI on an existing FastAPI app (e.g. at /ui)."""
+    init_db()
+
+    @ui.page("/")
+    def _page():
+        _build_ui()
+
+    ui.run_with(fastapi_app, mount_path=mount_path)
 
 
 if __name__ == "__main__":
