@@ -64,3 +64,13 @@ def local_mistral_7b_instruct(prompt: str, options: dict = {}, context: dict = {
         model="mistral:7b",
         host="local",
     )
+
+
+def local_llama_3_groq_tool_use(prompt: str, options: dict = {}, context: dict = {}):
+    return _run_and_return_output(
+        prompt,
+        options,
+        context,
+        model="llama3-groq-tool-use",
+        host="local",
+    )

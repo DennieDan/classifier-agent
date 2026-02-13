@@ -29,3 +29,12 @@ Supervisor:
   -> it is 9025 because its main feature is meter
   **The Vague Input**: "High-grade industrial polymers for medical 3D printing." (Requires autonomous recursive search for chemical composition).
   **The Multi-Component**: "Electric vehicle charging station with integrated advertising LED display."
+
+## Pareto Frontier Evaluation
+
+| Model                      | Latency           | accuracy | Token cost/permit   |
+| -------------------------- | ----------------- | -------- | ------------------- |
+| cloud openai gpt4o         | 125s              |          | 5700 token/$0.0108  |
+| local llama3.1 8b          | 112s              |          | 41000 token (local) |
+| local llama3 groq tool use | 117s              | High     | 13200 token (local) |
+| local mistral 7b           | Cannot call tools |

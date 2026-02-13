@@ -10,8 +10,12 @@ providers:
   #   label: "Cloud: Groq Llama 3.3 70B Versatile"
   # - id: "file://app/pareto/agent_providers.py:local_llama_3_1_8b_instruct_q8_0"
   #   label: "Local: Llama 3.1 8B Instruct Q8.0"
-  - id: "file://app/pareto/agent_providers.py:cloud_openai_gpt_4o"
-    label: "Cloud: OpenAI GPT-4o"
+  # - id: "file://app/pareto/agent_providers.py:cloud_openai_gpt_4o"
+  #   label: "Cloud: OpenAI GPT-4o"
+  # - id: "file://app/pareto/agent_providers.py:local_mistral_7b_instruct"
+  #   label: "Local: Mistral 7B Instruct"
+  - id: "file://app/pareto/agent_providers.py:local_llama_3_groq_tool_use"
+    label: "Local: Llama 3 Groq Tool Use"
 
 # 3. Load your High-Ambiguity Test Set
 tests: app/pareto/tests.json
