@@ -34,6 +34,7 @@ logging.basicConfig(
         logging.StreamHandler(),
     ],
 )
+# logging.disable(logging.INFO)
 logger = logging.getLogger(__name__)
 
 

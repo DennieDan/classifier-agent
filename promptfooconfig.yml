@@ -6,10 +6,12 @@ prompts:
 # Uses app/pareto/providers.py; run from repo root with PYTHONPATH=app so imports resolve.
 providers:
   # Cloud LLM: GPT-4o (The 95% Accuracy target)
-  # - id: "file://app/pareto/providers.py:cloud_groq_llama_3_3_70b_versatile"
+  # - id: "file://app/pareto/agent_providers.py:cloud_groq_llama_3_3_70b_versatile"
   #   label: "Cloud: Groq Llama 3.3 70B Versatile"
-  - id: "file://app/pareto/providers.py:local_llama_3_1_8b_instruct_q8_0"
-    label: "Local: Llama 3.1 8B Instruct Q8.0"
+  # - id: "file://app/pareto/agent_providers.py:local_llama_3_1_8b_instruct_q8_0"
+  #   label: "Local: Llama 3.1 8B Instruct Q8.0"
+  - id: "file://app/pareto/agent_providers.py:cloud_openai_gpt_4o"
+    label: "Cloud: OpenAI GPT-4o"
 
 # 3. Load your High-Ambiguity Test Set
 tests: app/pareto/tests.json

@@ -11,6 +11,7 @@ from chromadb.api import EMBEDDING_KEY
 from dotenv import load_dotenv
 from langchain_groq import ChatGroq
 from langchain_ollama import ChatOllama
+from langchain_openai import ChatOpenAI
 from ollama import Client as OllamaClient
 
 load_dotenv()
@@ -24,6 +25,7 @@ LLM_MODEL = "llama-3.3-70b-versatile"
 # llama-3.3-70b-versatile – Llama 3.1 70B
 LLM_TEMPERATURE = 0
 LLM_API_KEY = os.getenv("GROQ_API_KEY")
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
 EMBED_MODEL = "BAAI/bge-small-en-v1.5"
 
@@ -48,3 +50,8 @@ def get_local_ollama_llm(model: str = "llama3.1:8b-instruct-q8_0"):
         request_timeout=600,
     )
     return ollama_llm
+
+
+def get_cloud_openai_gpt_4o(model: str = "gpt-4o"):
+    """Get configured OpenAI GPT-4o instance."""
+    return ChatOpenAI(model=model, temperature=LLM_TEMPERATURE, api_key=OPENAI_API_KEY)

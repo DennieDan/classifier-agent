@@ -4,10 +4,10 @@ import sys
 import uuid
 from typing import Annotated
 
-from constants import get_cloud_groq_llm
+from constants import get_cloud_groq_llm, get_cloud_openai_gpt_4o, get_local_ollama_llm
 from langchain_core.messages.tool import tool_call
 from langchain_core.prompts import ChatPromptTemplate
-from langchain_core.runnables import Runnable, RunnableConfig
+from langchain_core.runnables import Runnable, RunnableConfig, RunnableLambda
 from langgraph.graph.message import BaseMessage, add_messages
 from langgraph.graph.state import END, START, StateGraph
 from prompts.supervisor_prompt_tools import SUPERVISOR_PROMPT
@@ -34,7 +34,36 @@ load_dotenv()
 load_dotenv(os.path.join(_SCRIPT_DIR, ".env"))
 
 # llm = ChatOllama(model="llama3-groq-tool-use", temperature=0)
-llm = get_cloud_groq_llm(model="llama-3.3-70b-versatile")
+
+
+class ReactGraph:
+    def __init__(
+        self, model: str = "llama-3.3-70b-versatile-q8_0", host: str = "cloud groq"
+    ):
+        if host == "cloud groq":
+            self.llm = get_cloud_groq_llm(model=model)
+        elif host == "local":
+            self.llm = get_local_ollama_llm(model=model)
+        elif host == "cloud openai":
+            self.llm = get_cloud_openai_gpt_4o(model=model)
+        else:
+            raise ValueError(f"Invalid host: {host}")
+        self.supervisor_runnable = primary_supervisor_prompt | self.llm.bind_tools(
+            tools
+        )
+        self.builder = StateGraph(State)
+        self.builder.add_node("supervisor", Supervisor(self.supervisor_runnable))
+        self.builder.add_node("tool", create_tool_node_with_fallback(tools))
+
+        self.builder.add_edge(START, "supervisor")
+        self.builder.add_conditional_edges("supervisor", tools_condition)
+        self.builder.add_edge("tool", "supervisor")
+        self.graph = self.builder.compile()
+
+    def run(self, user_input: str):
+        config = {"configurable": {"thread_id": str(uuid.uuid4())}}
+        state = self.graph.invoke({"messages": ("user", user_input)}, config=config)
+        return {"response": state["messages"][-1].content, "messages": state}
 
 
 class State(TypedDict):
@@ -121,6 +150,7 @@ primary_supervisor_prompt = ChatPromptTemplate.from_messages(
 #     ]
 # )
 
+llm = get_cloud_groq_llm(model="llama-3.3-70b-versatile-q8_0")
 supervisor_runnable = primary_supervisor_prompt | llm.bind_tools(tools)
 
 
@@ -136,7 +166,7 @@ def handle_tool_error(state: State) -> dict:
 
 def create_tool_node_with_fallback(tools: list) -> dict:
     return ToolNode(tools=tools).with_fallbacks(
-        [supervisor_runnable], exception_key="error"
+        [RunnableLambda(handle_tool_error)], exception_key="error"
     )
 
 

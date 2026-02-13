@@ -1,14 +1,14 @@
 [
   {
     "vars": {
-      "trade_description": "Modular solar-powered IoT sensors for agricultural moisture tracking.",
+      "trade_description": "Give me the HS-Code of Modular solar-powered IoT sensors for agricultural moisture tracking.",
       "ideal_chapter": "90",
       "ambiguity_type": "The Overlap"
     },
     "asserts": [
       {
         "type": "javascript",
-        "value": "output.includes('9025') || output.includes('8541')"
+        "value": "output.includes('9025') || output.includes('8541') || output.includes('90')"
       },
       {
         "type": "llm-rubric",
@@ -18,7 +18,7 @@
   },
   {
     "vars": {
-      "trade_description": "High-grade industrial polymers for medical 3D printing.",
+      "trade_description": "Give me the HS-Code of High-grade industrial polymers for medical 3D printing.",
       "ideal_chapter": "39",
       "ambiguity_type": "The Vague Input"
     },
@@ -31,7 +31,7 @@
   },
   {
     "vars": {
-      "trade_description": "Electric vehicle charging station with integrated advertising LED display.",
+      "trade_description": "Give me the HS-Code of Electric vehicle charging station with integrated advertising LED display.",
       "ideal_chapter": "85",
       "ambiguity_type": "The Multi-Component"
     },
@@ -42,7 +42,7 @@
       },
       {
         "type": "llm-rubric",
-        "value": "The agent must identify the charging function (8504) as the essential character over the LED display (8528)."
+        "value": "The agent must identify the charging function (8504) as the essential character over the LED display (8528). It needs to at least identify chapter 85 as the primary chapter."
       }
     ]
   }

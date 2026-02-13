@@ -1,3 +1,4 @@
+import json
 import sys
 from pathlib import Path
 from typing import Dict, List, Union
@@ -52,17 +53,18 @@ def evaluate_search_results(
 
 
 def get_best_confidence_score_and_compare_with_threshold(
-    confidence_score: List[float],
+    confidence_score: List[float] | str,
 ) -> bool:
     """
-    Get the best confidence score and compare it with the threshold.
+    Get the best confidence score from a list of confidence scores and compare it with the threshold.
     Args:
-        confidence_score: the confidence score for each possible HS-Code
+        confidence_score: an array of confidence scores (or a JSON array string, e.g. "[0.9, 0.4, 0.3]")
     Returns:
         True if the best confidence score is greater than 0.9, False otherwise
     """
-    best_confidence_score = max(confidence_score)
-    return best_confidence_score > 0.9
+    if isinstance(confidence_score, str):
+        confidence_score = json.loads(confidence_score)
+    return max(confidence_score) > 0.9
 
 
 def identify_primary_function(item: str) -> str:

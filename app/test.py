@@ -6,6 +6,7 @@ from graph import AgentGraph
 from index_query import IndexQuery
 from langchain_core.messages import HumanMessage
 from langchain_ollama import ChatOllama
+from pareto.agent_providers import cloud_groq_llama_3_3_70b_versatile
 from tools.agent_tools import identify_primary_function
 
 user_input_1 = "What is the HS-Code of Virgin Olive Oil?"
@@ -79,11 +80,14 @@ if __name__ == "__main__":
     # retrieval_result = index_query.index_query(query=user_input_2)
     # print(retrieval_result)
 
-    result = run_graph(user_input_polymer)
-    print(result)
+    # result = run_graph(user_input_polymer)
+    # print(result)
 
     # async def main():
     #     result = await run_agent(user_input_1)
     #     print(json.dumps(result, indent=4))
 
     # asyncio.run(main())
+
+    result = cloud_groq_llama_3_3_70b_versatile(user_input_1)
+    print(result)
