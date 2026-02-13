@@ -1,20 +1,29 @@
+import asyncio
 import json
 import logging
 import operator
+import os
 import time
 from typing import Annotated, Dict, List, Literal, TypedDict, Union
 
+# Resolve paths so MCP stdio servers can be found regardless of process cwd
+_GRAPH_DIR = os.path.dirname(os.path.abspath(__file__))
+_TOOLS_DIR = os.path.join(_GRAPH_DIR, "tools")
+
 from index_query import IndexQuery
 from langchain_core.language_models import BaseChatModel
-from langchain_core.messages import BaseMessage, HumanMessage, SystemMessage
+from langchain_core.messages import (
+    AIMessage,
+    BaseMessage,
+    HumanMessage,
+    SystemMessage,
+    ToolMessage,
+)
+from langchain_mcp_adapters.client import MultiServerMCPClient
 from langgraph.graph import END, START, StateGraph
 from prompts.search_prompt import SEARCH_PROMPT
 from prompts.supervisor_prompt import SUPERVISOR_PROMPT
 from pydantic import BaseModel, Field
-from tools.agent_tools import (
-    evaluate_search_results,
-    get_best_confidence_score_and_compare_with_threshold,
-)
 
 # Configure logging (set to logging.WARNING to turn off info logs)
 logging.basicConfig(
@@ -61,6 +70,9 @@ class SupervisorDecision(BaseModel):
     feedback: str = Field(
         description="Reasoning for the decision. If confidence is low, provide specific instructions to search recursively (e.g. 'Check Note 3 of Chapter 85')."
     )
+    reasoning_step: str = Field(
+        description="Reasoning for the decision. If confidence is low, provide specific instructions to search recursively (e.g. 'Check Note 3 of Chapter 85')."
+    )
     best_search_result: str = Field(
         description="The best search result from the search agent"
     )
@@ -89,6 +101,21 @@ class AgentGraph:
         self.index_query = IndexQuery()
         self.workflow = StateGraph(AgentState)
 
+        self.server_params = {
+            "regulatory_server": {
+                "command": "python",
+                "args": [os.path.join(_TOOLS_DIR, "regulatory_server.py")],
+                "transport": "stdio",
+                "cwd": _GRAPH_DIR,  # so server can import index_query, etc.
+            },
+            "agent_tools": {
+                "command": "python",
+                "args": [os.path.join(_TOOLS_DIR, "agent_tools.py")],
+                "transport": "stdio",
+                "cwd": _GRAPH_DIR,
+            },
+        }
+        self.client = MultiServerMCPClient(self.server_params)
         # Add Nodes
         self.workflow.add_node("supervisor", self.supervisor_node)
         self.workflow.add_node("search_agent", self.search_agent_node)
@@ -106,73 +133,103 @@ class AgentGraph:
 
         self.app = self.workflow.compile()
 
-    def supervisor_node(self, state: AgentState):
+    async def supervisor_node(self, state: AgentState):
         """
         Supervisor Agent: analyzing input + rules + previous search results.
         """
         messages = state["messages"]
         search_results = state.get("search_results", "")
-        evaluation = None
+        current_rules = state.get("rules", "")
 
-        threshold_met = None
-        if search_results:
-            evaluation = evaluate_search_results.invoke(
-                {
-                    "input": messages[0].content,
-                    "search_results": search_results,
-                }
+        # --- Step 1: MCP — load all tools (regulatory_server + agent_tools) for context and optional rule fetch ---
+        all_tools: List = []
+        try:
+            all_tools = await self.client.get_tools()  # both servers
+        except BaseException as e:
+            logger.warning(
+                "MCP connection failed (check that server scripts run from app/tools with cwd=app): %s",
+                e,
             )
-            if evaluation:
-                logger.info(
-                    f"\n--- [Supervisor] Search Results Evaluation: {json.dumps(evaluation.evaluation, indent=4)} ---"
+
+        # Build agent context: list of tool names and descriptions for the prompt
+        available_tools_text = "No tools loaded (MCP unavailable)."
+        if all_tools:
+            try:
+                lines = [
+                    f"- **{t.name}**: {(t.description or '(No description)').strip()}"
+                    for t in all_tools
+                ]
+                available_tools_text = "\n".join(lines)
+            except Exception as e:
+                logger.warning(f"Could not format MCP tool list: {e}")
+
+        # Fetch GIR rules via MCP if we don't have them yet
+        if not current_rules:
+            try:
+                get_rules_tool = next(
+                    (t for t in all_tools if t.name == "get_regulatory_rules"), None
                 )
+                if get_rules_tool:
+                    result = await get_rules_tool.ainvoke({"rule_number": "all"})
+                    current_rules = (
+                        result
+                        if isinstance(result, str)
+                        else getattr(result, "content", str(result))
+                    )
+                    logger.info("--- [Supervisor] Fetched GIR Rules via MCP ---")
+                else:
+                    current_rules = "Error: get_regulatory_rules tool not found."
+            except Exception as e:
+                logger.error(f"Failed to fetch rules via MCP: {e}")
+                current_rules = "Error retrieving rules. Proceed with caution."
 
-        # Build tool descriptions for the prompt
-        _supervisor_tools = [
-            get_best_confidence_score_and_compare_with_threshold,
-        ]
-        tools_description = "\n".join(
-            f"- **{t.name}**: {t.description}" for t in _supervisor_tools
+        # --- Step 2: Prompt Engineering ---
+        tools_context = f"Latest Search Agent Output: {search_results}"
+        rules_context = f"Official STCCED 2022 Rules:\n{current_rules[:3000]}..."  # Truncate if too long
+        dynamic_system_prompt = SUPERVISOR_PROMPT.format(
+            user_input=messages[0].content,
+            available_tools=available_tools_text,
+            tools_context=tools_context,
+            rules_context=rules_context,
         )
 
-        # Update System Prompt to include the Retrieved Rules and tool descriptions
-        # This is the "Context Injection" pattern
-        threshold_line = (
-            f"Threshold comparison (best confidence strictly > 0.9): {threshold_met}"
-            if threshold_met is not None
-            else "N/A (no search results to evaluate)"
-        )
-        dynamic_system_prompt = f"""
-        {SUPERVISOR_PROMPT.format(tools=tools_description)}
-        
-        === CURRENT SEARCH STATUS ===
-        User Input: {messages[0].content}
-        Latest Worker Finding: {search_results}
-        Search Results Evaluation: {json.dumps(evaluation.evaluation, indent=4) if evaluation else "N/A"}
-        {threshold_line}
-        """
+        system_msg = SystemMessage(content=dynamic_system_prompt)
+        conversation: List[BaseMessage] = [system_msg] + list(messages)
 
-        structured_llm = self.llm.with_structured_output(SupervisorDecision)
-        response = structured_llm.invoke([SystemMessage(content=dynamic_system_prompt)])
+        # --- Step 3: Tool-calling loop (LLM can invoke MCP tools) ---
+        llm_with_tools = self.llm.bind_tools(all_tools)
+        response = await llm_with_tools.ainvoke(
+            [SystemMessage(content=dynamic_system_prompt)]
+        )
+        # --- Step 4: Final structured decision (with full context including tool results) ---
+        # structured_llm = self.llm.with_structured_output(SupervisorDecision)
+        # response = await structured_llm.ainvoke(conversation)
+
+        logger.info(f"--- [Supervisor] Response: {response} ---")
+
+        response = SupervisorDecision.model_validate(json.loads(response.content))
 
         logger.info(
-            f"\n--- [Supervisor] Confidence: {response.confidence*100}% | Decision: {response.next_action} ---"
+            f"\n--- [Supervisor] Decision: {response.next_action} | Confidence: {response.confidence*100}% ---"
         )
-        logger.info(f"\n--- [Supervisor] Feedback/Reasoning: {response.feedback} ---")
+        logger.info(f"--- [Supervisor] Reasoning: {response.reasoning_step} ---")
+        logger.info(f"--- [Supervisor] Feedback: {response.feedback} ---")
 
+        # --- Step 4: State Update ---
         if response.next_action == "FINISH":
             return {
                 "next_action": "FINISH",
-                "supervisor_reasoning": response.feedback,
+                "supervisor_reasoning": response.reasoning_step,
                 "confidence": response.confidence,
-                "final_answer": response.best_search_result,
+                "final_answer": response.feedback,  # The Auditor's Log
+                "rules": current_rules,  # Persist rules in state
             }
 
         return {
-            "previous_search_results": search_results,
-            "instructions": response.feedback,
-            "search_results": "",
+            "instructions": response.feedback,  # Strategy for the worker
             "next_action": response.next_action,
+            "rules": current_rules,  # Persist rules so we don't fetch them every time
+            "previous_search_results": search_results,
         }
 
     def search_agent_node(self, state: AgentState):
@@ -192,18 +249,6 @@ class AgentGraph:
         retrieval_result = self.index_query.index_query(query=prompt)
         logger.info(f"--- [Search Agent] Retrieval Result: {retrieval_result} ---")
 
-        #         prompt_with_results = f"""{prompt}
-
-        # === RETRIEVAL RESULT FROM DATABASE ===
-        # {retrieval_result}
-        # === END RETRIEVAL RESULT ===
-
-        # Based on the retrieval result above, provide possible responses (e.g. HS-Code and classification details) and reasoning for each."""
-        #         structured_llm = self.llm.with_structured_output(SearchAgentDecision)
-        #         response = structured_llm.invoke([HumanMessage(content=prompt_with_results)])
-
-        #         logger.info(f"--- [Search Agent] Result: {response}")
-
         return {
             "search_results": retrieval_result,
             "next_action": "supervisor",
@@ -211,10 +256,3 @@ class AgentGraph:
 
     def route_logic(self, state: AgentState) -> str:
         return state.get("next_action", "search_agent")
-
-
-# --- 5. Execution ---
-# evaluate_search_results is only called from: (1) app/test.py with fixed Virgin Olive Oil,
-# (2) this graph's supervisor_node with state["messages"][0].content and state["search_results"].
-# So any evaluation output (e.g. electric shavers vs toothbrushes) comes from running this
-# graph with that query and search results—either by changing content= below or via another script.

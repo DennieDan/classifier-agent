@@ -9,6 +9,7 @@ from pathlib import Path
 from chromadb.api import EMBEDDING_KEY
 from dotenv import load_dotenv
 from langchain_groq import ChatGroq
+from langchain_ollama import ChatOllama
 
 load_dotenv()
 
@@ -34,3 +35,13 @@ def get_llm():
     return ChatGroq(
         model=LLM_MODEL, temperature=LLM_TEMPERATURE, groq_api_key=LLM_API_KEY
     )
+
+
+def get_ollama_llm():
+    """Get configured Ollama LLM instance."""
+    ollama_llm = ChatOllama(
+        model="llama3.1:8b-instruct-q8_0",
+        temperature=0,
+        request_timeout=600,
+    )
+    return ollama_llm

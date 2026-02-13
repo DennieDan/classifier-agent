@@ -1,0 +1,10 @@
+2026-02-13 00:40:25,462 - INFO - Starting worker 'MacBook-Pro-48.local#33429' with the following tasks:
+2026-02-13 00:40:25,462 - INFO - * trace(message: str, ...)
+2026-02-13 00:40:25,462 - INFO - * fail(message: str, ...)
+2026-02-13 00:40:25,462 - INFO - * sleep(seconds: float, ...)
+2026-02-13 00:40:25,467 - INFO - Processing request of type ListToolsRequest
+2026-02-13 09:21:55,884 - INFO - Starting worker 'MacBook-Pro-48.local#44180' with the following tasks:
+2026-02-13 09:21:55,884 - INFO - * trace(message: str, ...)
+2026-02-13 09:21:55,884 - INFO - * fail(message: str, ...)
+2026-02-13 09:21:55,884 - INFO - * sleep(seconds: float, ...)
+2026-02-13 09:21:55,888 - INFO - Processing request of type ListToolsRequest

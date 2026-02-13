@@ -1,164 +1,176 @@
-import json
-import logging
-import re
-from typing import TypedDict
+import asyncio
+import os
+import sys
+import uuid
+from typing import Annotated
 
-from constants import get_llm
-from prompts.classifier_prompt import CLASSIFIER_PROMPT
-
-# Configure logging to log.txt
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s - %(levelname)s - %(message)s",
-    handlers=[
-        logging.FileHandler("log.txt"),
-        logging.StreamHandler(),
-    ],
+from langchain_core.messages.tool import tool_call
+from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.runnables import Runnable, RunnableConfig
+from langgraph.graph.message import BaseMessage, add_messages
+from langgraph.graph.state import END, START, StateGraph
+from prompts.supervisor_prompt_tools import SUPERVISOR_PROMPT
+from tools.agent_tools import (
+    evaluate_search_results,
+    get_best_confidence_score_and_compare_with_threshold,
+    identify_primary_function,
 )
-logger = logging.getLogger(__name__)
+from tools.regulatory_server import get_regulatory_rules, search_stcced_pdf
+from typing_extensions import TypedDict
 
-from langgraph.graph import END, StateGraph
+_SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+if _SCRIPT_DIR not in sys.path:
+    sys.path.insert(0, _SCRIPT_DIR)
 
+from dotenv import load_dotenv
+from langchain_core.messages import HumanMessage, SystemMessage, ToolMessage
+from langchain_mcp_adapters.client import MultiServerMCPClient
+from langchain_ollama import ChatOllama
+from langgraph.checkpoint.sqlite import SqliteSaver
+from langgraph.prebuilt import ToolNode
 
-def parse_classifier_response(content: str) -> tuple[str, float, str]:
-    """
-    Parse LLM response to extract thought process and JSON result.
-    Returns (result, confidence, thought_process).
-    """
-    thought_process = ""
-    result = "OTHERS"
-    conf = 0.5
+load_dotenv()
+load_dotenv(os.path.join(_SCRIPT_DIR, ".env"))
 
-    # Extract JSON from markdown code block (```json ... ```)
-    json_match = re.search(r"```(?:json)?\s*(\{[\s\S]*?\})\s*```", content)
-    if json_match:
-        thought_process = content[: json_match.start()].strip()
-        try:
-            parsed = json.loads(json_match.group(1).strip())
-            result = parsed.get("result", result)
-            conf = float(parsed.get("conf", conf))
-        except (json.JSONDecodeError, ValueError):
-            pass
-    else:
-        # Fallback: try to find raw JSON in content
-        brace_match = re.search(r"\{[^{}]*(?:\"result\"|\"conf\")[^{}]*\}", content)
-        if brace_match:
-            thought_process = content[: brace_match.start()].strip()
-            try:
-                parsed = json.loads(brace_match.group(0))
-                result = parsed.get("result", result)
-                conf = float(parsed.get("conf", conf))
-            except (json.JSONDecodeError, ValueError):
-                pass
-        else:
-            thought_process = content
-
-    return result, conf, thought_process
+llm = ChatOllama(model="llama3-groq-tool-use", temperature=0)
 
 
-# --- 1. Define the Shared State ---
-# This dictionary acts as the "memory" passed between agents.
-class AgentState(TypedDict):
-    user_input: str
-    classification: str
-    confidence: float
-    thought_process: str
-    next_step: str  # Used by Supervisor to route
+class State(TypedDict):
+    messages: Annotated[list[BaseMessage], add_messages]
+    error: Exception
 
 
-# --- 2. Define the Agents (Nodes) ---
+class Supervisor:
+    def __init__(self, runnable: Runnable):
+        self.runnable = runnable
+
+    def __call__(self, state: State, config: RunnableConfig):
+        """
+        Call method to invoke LLM and handle its responses.
+        Re-prompt the assistant if the response is not a tool call or meaningful text.
 
 
-def supervisor_agent(state: AgentState):
-    """
-    The Supervisor: Analyzes the input and decides which worker to call.
-    In a complex system, this would use an LLM to choose between multiple workers.
-    """
-    logger.info("[Supervisor] Analyzing request: '%s'", state["user_input"])
+        Args:
+            state: The current state of the assistant containing the messages and error.
+            config: The configuration for the runnable.
 
-    # Simple Logic: If it looks like a classification task, send to Classifier.
-    # In a real system, this is where the LLM decides routing.
-    if state["user_input"]:
-        return {"next_step": "classifier_worker"}
-    else:
-        return {"next_step": "error"}
+        Returns:
+            The updated state of the assistant.
+        """
+        # Ensure the LLM sees the FULL history from the state
+        # ChatPromptTemplate expects a mapping (dict); the template has placeholder "{messages}"
+        while True:
+            result = self.runnable.invoke(state)
+            if not result.tool_calls and (
+                not result.content
+                or isinstance(result.content, list)
+                and not result.content[0].get("text")
+            ):
+                messages = state["messages"] + [("user", "Respond with a real output")]
+                state = {**state, "messages": messages}
+            else:
+                break
+        return {"messages": result}
 
 
-def classifier_worker(state: AgentState):
-    """
-    The Worker: Performs the specific task (Classification).
-    """
-    logger.info("[Worker] Classifying item...")
+tools = [
+    evaluate_search_results,
+    get_best_confidence_score_and_compare_with_threshold,
+    identify_primary_function,
+    get_regulatory_rules,
+    search_stcced_pdf,
+]
 
-    item = state["user_input"].lower()
 
-    llm = get_llm()
+def get_agent_tool_names() -> list[str]:
+    """Return the names of tools the agent has access to (for debugging)."""
+    names = []
+    for t in tools:
+        name = getattr(t, "name", None) or getattr(t, "__name__", "unknown")
+        names.append(name)
+    return names
 
-    response = llm.invoke(CLASSIFIER_PROMPT.format(item=item))
 
-    content = response.content if hasattr(response, "content") else str(response)
-    result, conf, thought_process = parse_classifier_response(content)
+def _tool_display(t):
+    """Support both LangChain tools (.name, .description) and plain callables (__name__, __doc__)."""
+    name = getattr(t, "name", None) or getattr(t, "__name__", "unknown")
+    desc = (
+        getattr(t, "description", None)
+        or getattr(t, "__doc__", "")
+        or "(No description)"
+    )
+    return f"- **{name}**: {(desc or "(No description)").strip().split(chr(10))[0]}"
 
-    logger.info("[Worker] Thought process: %s...", thought_process)
-    logger.info("[Worker] Result found: %s (conf: %s)", result, conf)
+
+tools_context = "\n".join(_tool_display(t) for t in tools)
+primary_supervisor_prompt = ChatPromptTemplate.from_messages(
+    [
+        (
+            "system",
+            SUPERVISOR_PROMPT.format(available_tools=tools_context),
+        ),
+        ("placeholder", "{messages}"),
+    ]
+)
+# primary_supervisor_prompt = ChatPromptTemplate.from_messages(
+#     [
+#         SystemMessage(content=SUPERVISOR_PROMPT.format(available_tools=tools_context)),
+#         ("placeholder", "{messages}"),
+#     ]
+# )
+
+supervisor_runnable = primary_supervisor_prompt | llm.bind_tools(tools)
+
+
+def handle_tool_error(state: State) -> dict:
+    error = state["error"]
+    tool_calls = state["messages"][-1].tool_calls
     return {
-        "classification": result,
-        "confidence": conf,
-        "thought_process": thought_process,
+        "messages": [
+            ToolMessage(content=str(error), tool_call_id=tc["id"]) for tc in tool_calls
+        ]
     }
 
 
-# --- 3. Build the Graph (Workflow) ---
-
-# Initialize the Graph
-workflow = StateGraph(AgentState)
-
-# Add Nodes (The Agents)
-workflow.add_node("supervisor", supervisor_agent)
-workflow.add_node("classifier_worker", classifier_worker)
-
-# Set Entry Point
-workflow.set_entry_point("supervisor")
-
-# Add Conditional Edges (The Routing Logic)
-# The Supervisor output ("next_step") determines where we go next.
-workflow.add_conditional_edges(
-    "supervisor",
-    lambda x: x["next_step"],
-    {"classifier_worker": "classifier_worker", "error": END},
-)
-
-# Add Edge from Worker back to END (Task Complete)
-workflow.add_edge("classifier_worker", END)
-
-# Compile the app
-app = workflow.compile()
-
-# --- 4. Run the System ---
-
-if __name__ == "__main__":
-    # Test Case 1
-    inputs = {
-        "user_input": "I want a glass of water",
-        "classification": "",
-        "confidence": 0.0,
-        "thought_process": "",
-        "next_step": "",
-    }
-    result = app.invoke(inputs)
-    print(f"Thought process: {result['thought_process']}")
-    print(
-        f"Final Output: {result['classification']} (Confidence: {result['confidence']})"
+def create_tool_node_with_fallback(tools: list) -> dict:
+    return ToolNode(tools=tools).with_fallbacks(
+        [supervisor_runnable], exception_key="error"
     )
 
-    # Test Case 2
-    inputs = {
-        "user_input": "Give me an apple",
-        "classification": "",
-        "confidence": 0.0,
-        "next_step": "",
-    }
-    result = app.invoke(inputs)
-    print(
-        f"Final Output: {result['classification']} (Confidence: {result['confidence']})"
-    )
+
+def tools_condition(state: State) -> str:
+    if state["messages"][-1].tool_calls:
+        return "tool"
+    elif (
+        state["messages"][-1].content
+        and "Final Answer:" in state["messages"][-1].content
+    ):
+        return END
+    else:
+        return "supervisor"
+
+
+# Graph
+builder = StateGraph(State)
+
+builder.add_node("supervisor", Supervisor(supervisor_runnable))
+builder.add_node("tool", create_tool_node_with_fallback(tools))
+
+builder.add_edge(START, "supervisor")
+builder.add_conditional_edges("supervisor", tools_condition)
+builder.add_edge("tool", "supervisor")
+
+# the Checkpointer let the graph persist the state across restarts
+# memory = SqliteSaver.from_conn_string(":memory:")
+
+
+react_graph = builder.compile()
+
+
+def run_graph(user_input: str):
+    """
+    Run the graph with the user input.
+    """
+    config = {"configurable": {"thread_id": str(uuid.uuid4())}}
+    state = react_graph.invoke({"messages": ("user", user_input)}, config=config)
+    return {"response": state["messages"][-1].content, "messages": state}

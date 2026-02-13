@@ -9,9 +9,10 @@ if str(_app) not in sys.path:
     sys.path.insert(0, str(_app))
 
 from constants import get_ollama_llm
+from fastmcp import FastMCP
 from graph import logger
+from langchain_core.tools import tool
 from prompts.evaluate_prompt import EVALUATE_PROMPT
-from prompts.identify_function import IDENTIFY_PRIMARY_FUNCTION_PROMPT
 from pydantic import BaseModel, Field
 
 
@@ -23,27 +24,27 @@ class EvaluateSearchResultsDecision(BaseModel):
     )
 
 
+mcp = FastMCP("Agent Tools")
+
+
+@mcp.tool()
 def evaluate_search_results(
-    input: str, primary_function: str, search_results: str
-) -> str:
+    input: str, previous_feedback: str, search_results: str
+) -> EvaluateSearchResultsDecision:
     """
     Evaluate the search results and give confidence score for each possible HS-Code.
-    Args:
-        input: the user input
-        primary_function: the primary function of the item
-        search_results: the search results
-    Returns:
-        The evaluation results with confidence score for each possible HS-Code
+    input: the user input
+    previous_feedback: the previous feedback from the supervisor
+    search_results: the search results
+    return: the evaluation results with confidence score for each possible HS-Code
     """
-    logger.info(
-        f"--- [Evaluate Search Results] Input: {input}, Primary Function: {primary_function} ---"
-    )
+    logger.info(f"--- [Evaluate Search Results] Input: {input} ---")
     llm = get_ollama_llm()
     structured_llm = llm.with_structured_output(EvaluateSearchResultsDecision)
     response = structured_llm.invoke(
         EVALUATE_PROMPT.format(
             input=input,
-            primary_function=primary_function,
+            previous_feedback=previous_feedback,
             search_results=search_results,
         )
     )
@@ -51,30 +52,16 @@ def evaluate_search_results(
     return response
 
 
+@mcp.tool()
 def get_best_confidence_score_and_compare_with_threshold(
     confidence_score: List[float],
 ) -> bool:
     """
     Get the best confidence score and compare it with the threshold.
-    Args:
-        confidence_score: the confidence score for each possible HS-Code
-    Returns:
-        True if the best confidence score is greater than 0.9, False otherwise
     """
     best_confidence_score = max(confidence_score)
     return best_confidence_score > 0.9
 
 
-def identify_primary_function(item: str) -> str:
-    """
-    Identify the primary function of the item.
-    Args:
-        item: the item
-    Returns:
-        The primary function of the item
-    """
-    logger.info(f"--- [Identify Primary Function] Item: {item} ---")
-    llm = get_ollama_llm()
-    response = llm.invoke(IDENTIFY_PRIMARY_FUNCTION_PROMPT.format(item=item))
-    logger.info(f"--- [Identify Primary Function] Response: {response} ---")
-    return response
+if __name__ == "__main__":
+    mcp.run()
