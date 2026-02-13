@@ -5,7 +5,7 @@
 
 ## Project Structure
 
-## ENV
+## Set up
 
 `.env`
 
@@ -14,8 +14,6 @@ LLAMA_PARSE_API_KEY=llx-xxx
 GROQ_API_KEY=gsk_xxx
 OPENAI_API_KEY=sk-proj-xxx
 ```
-
-## Run on local machine
 
 From the project root, install dependencies and run the UI:
 
@@ -26,10 +24,32 @@ pip install -r requirements.txt
 To run local model, install them:
 
 ```bash
-ollama run llama3.1:8b-instruct-q8_0
-ollama run llama3-groq-tool-use
-ollama run mistral:7b
+ollama run llama3.1:8b-instruct-q8_0 # must install
+ollama run llama3-groq-tool-use # optional
+ollama run mistral:7b # optional
 ```
+
+# Prepare knowledge base
+
+The Knowledge base is prepared for LLM model `llama3.1:8b-instruct-q8_0` and Embedding Model `BAAI/bge-small-en-v1.5` (free from HuggingFace)
+
+Therefore, the search tool in `regulatory_server.py` is always used with LLM model `llama3.1:8b-instruct-q8_0`. (More adjustment will be done in the future)
+
+The file `stcced2022.pdf` is already parsed using LlamaParse and stored as `docs.md`
+
+To build the index (takes 32 seconds):
+
+```bash
+python app/index_server.py
+```
+
+If there is a need to parse the data again, run this. This script already included index building step. This may take up to 40 minutes.
+
+```bash
+python app/index_server_improved.py
+```
+
+## Run on local machine
 
 Run the FastAPI server
 
@@ -82,20 +102,6 @@ docker run -p 8888:8888 --name agent-ui agent-ui
 Access: `http://localhost:8888/ui`
 
 ---
-
-# Prepare knowledge base
-
-The Knowledge base is prepared for LLM model `llama3.1:8b-instruct-q8_0` and Embedding Model `BAAI/bge-small-en-v1.5` (free from HuggingFace)
-
-Therefore, the search tool in `regulatory_server.py` is always used with LLM model `llama3.1:8b-instruct-q8_0`. (More adjustment will be done in the future)
-
-Knowledge base is already prepared and store in ChromaDB with this repository.
-
-To run it again:
-
-```bash
-python app/index_server_improved.py
-```
 
 ## Pareto Frontier Evaluation
 
