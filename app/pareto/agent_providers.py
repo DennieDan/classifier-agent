@@ -54,3 +54,13 @@ def cloud_openai_gpt_4o(prompt: str, options: dict = {}, context: dict = {}):
         model="gpt-4o",
         host="cloud openai",
     )
+
+
+def local_mistral_7b_instruct(prompt: str, options: dict = {}, context: dict = {}):
+    return _run_and_return_output(
+        prompt,
+        options,
+        context,
+        model="mistral:7b",
+        host="local",
+    )
