@@ -45,19 +45,49 @@ Supervisor:
 
 # Run the agent
 
+`.env`
+
+```
+LLAMA_PARSE_API_KEY=llx-xxx
+GROQ_API_KEY=gsk_xxx
+OPENAI_API_KEY=sk-proj-xxx
+```
+
+To run local model, install them:
+
+```bash
+ollama run llama3.1:8b-instruct-q8_0
+ollama run llama3-groq-tool-use
+ollama run mistral:7b
+```
+
 2 ways:
 Method 1: Use the NiceGUI
 Method 2: run the code
 
+# Prepare knowledge base
+
+The Knowledge base is prepared for LLM model `llama3.1:8b-instruct-q8_0` and Embedding Model `BAAI/bge-small-en-v1.5` (free from HuggingFace)
+
+Therefore, the search tool in `regulatory_server.py` is always used with LLM model `llama3.1:8b-instruct-q8_0`. (More adjustment will be done in the future)
+
+Knowledge base is already prepared and store in ChromaDB with this repository.
+
+To run it again:
+
+```bash
+python app/index_server_improved.py
+```
+
 ## Pareto Frontier Evaluation
 
-| Model                        | Latency           | accuracy | Token cost/permit   |
-| ---------------------------- | ----------------- | -------- | ------------------- |
-| cloud openai gpt4o           | 125s              |          | 5700 token/$0.0108  |
-| cloud llama3.3-70b-versatile | 110s              |          | 27900 token/$0.00   |
-| local llama3.1 8b            | 112s              |          | 41000 token (local) |
-| local llama3 groq tool use   | 117s              | High     | 13200 token (local) |
-| local mistral 7b             | Cannot call tools |
+| Model                              | Latency           | accuracy | Token cost/permit   |
+| ---------------------------------- | ----------------- | -------- | ------------------- |
+| cloud openai gpt4o                 | 125s              |          | 5700 token/$0.0108  |
+| cloud groq llama-3.3-70b-versatile | 110s              |          | 27900 token/$0.00   |
+| local llama3.1:8b-instruct-q8_0    | 112s              |          | 41000 token (local) |
+| local llama3-groq-tool-use         | 117s              | High     | 13200 token (local) |
+| local mistral:7b                   | Cannot call tools |
 
 # Missing:
 
