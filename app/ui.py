@@ -1,16 +1,21 @@
 """NiceGUI interface: sidebar conversation list, main input/process/conversation view."""
 
 import asyncio
+import json
+import uuid
 from nicegui import ui
 
 from db import (
     get_conversation,
+    get_messages_snapshot,
     init_db,
     insert_conversation,
     list_conversations,
+    update_messages_snapshot,
     update_name,
     update_response,
 )
+from message_components import render_message_cards
 
 # State
 selected_id: int | None = None
@@ -64,22 +69,61 @@ def _show_input_view() -> None:
             ui.button("Submit", on_click=lambda: _on_submit(inp.value or "")).props("unelevated")
 
 
+def _messages_to_dict_list(messages) -> list:
+    """Convert state['messages'] (list of BaseMessage or mixed) to list of dicts for rendering."""
+    from langchain_core.messages.base import messages_to_dict
+    # LangGraph add_messages may yield list of BaseMessage
+    return messages_to_dict(list(messages))
+
+
+async def _run_agent_streaming(permit_id: int, user_input: str) -> None:
+    """Run the agent with astream and update the UI on each chunk. Save result to DB when done."""
+    from agent import react_graph
+    if main_content is None:
+        return
+    config = {"configurable": {"thread_id": str(uuid.uuid4())}}
+    try:
+        async for state in react_graph.astream(
+            {"messages": ("user", user_input)},
+            config=config,
+            stream_mode="values",
+        ):
+            messages = state.get("messages") or []
+            if not messages:
+                continue
+            try:
+                messages_dict = _messages_to_dict_list(messages)
+                render_message_cards(main_content, messages_dict)
+            except Exception:
+                pass
+        # Final state
+        messages = state.get("messages") or []
+        final_content = (messages[-1].content or "") if messages else ""
+        update_response(permit_id, final_content)
+        try:
+            messages_dict = _messages_to_dict_list(messages)
+            update_messages_snapshot(permit_id, json.dumps(messages_dict, default=str))
+        except Exception:
+            pass
+        _refresh_sidebar()
+    except Exception as e:
+        if main_content:
+            main_content.clear()
+            with main_content:
+                ui.label(f"Error: {e}").classes("text-red-600")
+        update_response(permit_id, str(e))
+
+
 def _show_process_view(permit_id: int, prompt: str) -> None:
+    """Show 'Running...' and start streaming the agent; cards update as chunks arrive."""
     if main_content is None:
         return
     main_content.clear()
     with main_content:
         with ui.column().classes("w-full max-w-2xl gap-4"):
-            ui.label("Process").classes("text-lg font-medium")
-            with ui.column().classes("w-full gap-2 rounded border p-4 bg-gray-50"):
-                # Placeholder process steps
-                for msg in ["Thinking...", "Searching...", "Evaluating...", "Done."]:
-                    ui.label(msg).classes("text-gray-700")
-            placeholder_response = f"[Placeholder response for: {prompt[:80]}{'...' if len(prompt) > 80 else ''}]"
-            ui.label("Response").classes("text-lg font-medium mt-4")
-            ui.label(placeholder_response).classes("w-full rounded border p-4 bg-white")
-            update_response(permit_id, placeholder_response)
-            _refresh_sidebar()
+            ui.label("Running...").classes("text-lg text-gray-600")
+            ui.spinner(size="lg")
+    ui.run_with_async(_run_agent_streaming(permit_id, prompt))
 
 
 def _on_rename(permit_id: int, current_name: str) -> None:
@@ -106,6 +150,7 @@ def _show_conversation_view(permit_id: int) -> None:
     if main_content is None or row is None:
         return
     _, name, prompt, response = row
+    snapshot = get_messages_snapshot(permit_id)
     main_content.clear()
     with main_content:
         with ui.column().classes("w-full max-w-2xl gap-4"):
@@ -114,10 +159,21 @@ def _show_conversation_view(permit_id: int) -> None:
                 ui.button(icon="edit", on_click=lambda: _on_rename(permit_id, name)).props("flat round").tooltip(
                     "Rename"
                 )
-            ui.label("Prompt").classes("font-medium text-gray-600")
-            ui.label(prompt).classes("w-full rounded border p-4 bg-gray-50")
-            ui.label("Response").classes("font-medium text-gray-600 mt-2")
-            ui.label(response or "(No response yet)").classes("w-full rounded border p-4 bg-white")
+            if snapshot:
+                try:
+                    messages_dict = json.loads(snapshot)
+                    cards_container = ui.column().classes("w-full gap-4")
+                    render_message_cards(cards_container, messages_dict)
+                except Exception:
+                    ui.label("Prompt").classes("font-medium text-gray-600")
+                    ui.label(prompt).classes("w-full rounded border p-4 bg-gray-50")
+                    ui.label("Response").classes("font-medium text-gray-600 mt-2")
+                    ui.label(response or "(No response yet)").classes("w-full rounded border p-4 bg-white")
+            else:
+                ui.label("Prompt").classes("font-medium text-gray-600")
+                ui.label(prompt).classes("w-full rounded border p-4 bg-gray-50")
+                ui.label("Response").classes("font-medium text-gray-600 mt-2")
+                ui.label(response or "(No response yet)").classes("w-full rounded border p-4 bg-white")
 
 
 def _on_submit(text: str) -> None:

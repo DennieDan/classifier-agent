@@ -43,6 +43,12 @@ Supervisor:
   **The Vague Input**: "High-grade industrial polymers for medical 3D printing." (Requires autonomous recursive search for chemical composition).
   **The Multi-Component**: "Electric vehicle charging station with integrated advertising LED display."
 
+# Run the agent
+
+2 ways:
+Method 1: Use the NiceGUI
+Method 2: run the code
+
 ## Pareto Frontier Evaluation
 
 | Model                        | Latency           | accuracy | Token cost/permit   |
@@ -52,3 +58,7 @@ Supervisor:
 | local llama3.1 8b            | 112s              |          | 41000 token (local) |
 | local llama3 groq tool use   | 117s              | High     | 13200 token (local) |
 | local mistral 7b             | Cannot call tools |
+
+# Acknowledgement:
+
+- NiceGUI implementation by Cursor AI

@@ -1,4 +1,7 @@
-{
+"""Reference format for agent conversation (HumanMessage, AIMessage, ToolMessage). Load with: from process_format import data."""
+from langchain_core.messages import AIMessage, HumanMessage, ToolMessage
+
+data = {
     "messages": [
         HumanMessage(
             content="What is the HS-Code of Virgin Olive Oil?",

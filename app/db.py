@@ -29,6 +29,12 @@ def init_db() -> None:
             """
         )
         conn.commit()
+        # Add messages_snapshot column if missing (migration)
+        cur = conn.execute("PRAGMA table_info(permits)")
+        columns = [row[1] for row in cur.fetchall()]
+        if "messages_snapshot" not in columns:
+            conn.execute("ALTER TABLE permits ADD COLUMN messages_snapshot TEXT")
+            conn.commit()
     finally:
         conn.close()
 
@@ -90,6 +96,33 @@ def update_name(permit_id: int, name: str) -> None:
         conn.execute(
             "UPDATE permits SET name = ? WHERE id = ?",
             (name.strip() or "Untitled", permit_id),
+        )
+        conn.commit()
+    finally:
+        conn.close()
+
+
+def get_messages_snapshot(permit_id: int) -> Optional[str]:
+    """Return the messages_snapshot JSON string for the given permit id, or None."""
+    conn = _get_conn()
+    try:
+        cur = conn.execute(
+            "SELECT messages_snapshot FROM permits WHERE id = ?",
+            (permit_id,),
+        )
+        row = cur.fetchone()
+        return row[0] if row and row[0] else None
+    finally:
+        conn.close()
+
+
+def update_messages_snapshot(permit_id: int, messages_json: str) -> None:
+    """Update the messages_snapshot column for the given permit id."""
+    conn = _get_conn()
+    try:
+        conn.execute(
+            "UPDATE permits SET messages_snapshot = ? WHERE id = ?",
+            (messages_json, permit_id),
         )
         conn.commit()
     finally:

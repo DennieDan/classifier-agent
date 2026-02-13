@@ -8,7 +8,7 @@ _APP = os.path.join(_ROOT, "app")
 sys.path.insert(0, _APP)
 os.chdir(_APP)
 
-from ui import run_ui
+from app.ui import run_ui
 
 if __name__ == "__main__":
     run_ui()
