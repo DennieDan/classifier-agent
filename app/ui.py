@@ -64,6 +64,17 @@ def _show_input_view() -> None:
     with main_content:
         with ui.column().classes("w-full max-w-2xl gap-4"):
             ui.label("Enter your prompt and press Enter").classes("text-lg text-gray-600")
+            with ui.row().classes("w-full gap-4 items-center"):
+                ui.select(
+                    options=["llama-3.3-70b-versatile-q8_0"],
+                    value="llama-3.3-70b-versatile-q8_0",
+                    label="Model",
+                ).classes("min-w-48").props("outlined dense")
+                ui.select(
+                    options=["Cloud Groq"],
+                    value="Cloud Groq",
+                    label="Host",
+                ).classes("min-w-40").props("outlined dense")
             inp = ui.input(placeholder="Type here...").classes("w-full").props("outlined")
             inp.on("keydown.enter", lambda e: _on_submit(inp.value or ""))
             ui.button("Submit", on_click=lambda: _on_submit(inp.value or "")).props("unelevated")
