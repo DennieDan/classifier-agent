@@ -4551,3 +4551,78 @@ Stack (most recent call last):
 2026-02-14 00:59:27,793 - INFO - --- [Evaluate Search Results] Response: evaluation=[EvaluationItem(search_result='Chapter 39 - Plastics and articles thereof, specifically Headings 39.01 to 39.14', reasoning='The search result is highly related to the primary function of the item, which is raw material for 3D printing in medical applications. The result provides specific headings within Chapter 39, showing good reasoning and coverage of small assorted information.', confidence_score=1.0)] ---
 2026-02-14 00:59:28,078 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
 2026-02-14 00:59:28,437 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-14 02:07:47,845 - INFO - Load pretrained SentenceTransformer: BAAI/bge-small-en-v1.5
+2026-02-14 02:07:52,050 - INFO - 1 prompt is loaded, with the key: query
+2026-02-14 02:07:52,103 - INFO - Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+2026-02-14 02:08:11,226 - INFO - Load pretrained SentenceTransformer: BAAI/bge-small-en-v1.5
+2026-02-14 02:08:15,786 - INFO - 1 prompt is loaded, with the key: query
+2026-02-14 02:08:15,910 - INFO - Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+2026-02-14 02:08:47,499 - INFO - Load pretrained SentenceTransformer: BAAI/bge-small-en-v1.5
+2026-02-14 02:08:51,656 - INFO - 1 prompt is loaded, with the key: query
+2026-02-14 02:08:51,693 - INFO - Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+2026-02-14 02:09:02,481 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-14 02:09:02,497 - INFO - --- [Identify Primary Function] Item: radiator panels ---
+2026-02-14 02:09:02,741 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-14 02:09:02,743 - INFO - --- [Identify Primary Function] Response: content='The primary function of the item "radiator panels" is "Heating equipment".' additional_kwargs={} response_metadata={'token_usage': {'completion_tokens': 18, 'prompt_tokens': 203, 'total_tokens': 221, 'completion_time': 0.055222049, 'completion_tokens_details': None, 'prompt_time': 0.009941895, 'prompt_tokens_details': None, 'queue_time': 0.048149566, 'total_time': 0.065163944}, 'model_name': 'llama-3.3-70b-versatile', 'system_fingerprint': 'fp_c06d5113ec', 'service_tier': 'on_demand', 'finish_reason': 'stop', 'logprobs': None, 'model_provider': 'groq'} id='lc_run--019c5831-283d-7002-bf3a-0d04a66d3d6e-0' tool_calls=[] invalid_tool_calls=[] usage_metadata={'input_tokens': 203, 'output_tokens': 18, 'total_tokens': 221} ---
+2026-02-14 02:09:03,116 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-14 02:09:05,267 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-14 02:09:05,779 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-14 02:09:05,783 - INFO - --- [Evaluate Search Results] Input: radiator panels, Primary Function: Heating equipment ---
+2026-02-14 02:09:06,276 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-14 02:09:06,278 - INFO - --- [Evaluate Search Results] Response: evaluation=[EvaluationItem(search_result='Chapter 85 - Electrical machinery and equipment and parts thereof', reasoning='The search result is not related to the primary function of the item, which is heating equipment. The result is about electrical machinery and equipment, which is not relevant to radiator panels.', confidence_score=0.2)] ---
+2026-02-14 02:09:06,681 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-14 02:09:08,818 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-14 02:09:09,362 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-14 02:09:09,368 - INFO - --- [Evaluate Search Results] Input: radiator panels, Primary Function: Heating equipment ---
+2026-02-14 02:09:09,974 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-14 02:09:09,977 - INFO - --- [Evaluate Search Results] Response: evaluation=[EvaluationItem(search_result='Chapter 84, which covers machinery and mechanical appliances, including heating equipment', reasoning='The search result is highly related to the primary function of the item, which is heating equipment. The result also provides specific headings and subheadings, such as heading 84.21 and 84.22, that are relevant to heating equipment. However, the result does not fully answer the user input as it does not provide the specific HS-Code for radiator panels.', confidence_score=0.8)] ---
+2026-02-14 02:09:10,289 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-14 02:09:11,275 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-14 02:09:11,674 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-14 02:09:11,679 - INFO - --- [Evaluate Search Results] Input: radiator panels, Primary Function: Heating equipment ---
+2026-02-14 02:09:12,365 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-14 02:09:12,367 - INFO - --- [Evaluate Search Results] Response: evaluation=[EvaluationItem(search_result='8504.90.31 - Electric space heating equipment, including radiators', reasoning="The search result is highly related to the primary function of the item, which is heating equipment. The result is specific and covers the user input 'radiator panels'.", confidence_score=0.9), EvaluationItem(search_result='8504.90.41 - Other electric heating equipment', reasoning="The search result is related to the primary function of the item, but it is not as specific as the first result. It does not fully cover the user input 'radiator panels'.", confidence_score=0.6)] ---
+2026-02-14 02:09:12,719 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-14 02:09:13,056 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-14 02:09:13,461 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-02-14 02:09:13,462 - INFO - Retrying request to /chat/completions in 20.000000 seconds
+2026-02-14 02:09:36,193 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-14 02:09:36,579 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-14 02:14:02,593 - INFO - Load pretrained SentenceTransformer: BAAI/bge-small-en-v1.5
+2026-02-14 02:14:06,627 - INFO - 1 prompt is loaded, with the key: query
+2026-02-14 02:14:06,661 - INFO - Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+2026-02-14 02:16:14,983 - INFO - Load pretrained SentenceTransformer: BAAI/bge-small-en-v1.5
+2026-02-14 02:16:18,754 - INFO - 1 prompt is loaded, with the key: query
+2026-02-14 02:16:18,783 - INFO - Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+2026-02-14 02:16:52,654 - INFO - Load pretrained SentenceTransformer: BAAI/bge-small-en-v1.5
+2026-02-14 02:16:56,680 - INFO - 1 prompt is loaded, with the key: query
+2026-02-14 02:16:56,713 - INFO - Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+2026-02-14 02:17:13,891 - INFO - Load pretrained SentenceTransformer: BAAI/bge-small-en-v1.5
+2026-02-14 02:17:17,573 - INFO - 1 prompt is loaded, with the key: query
+2026-02-14 02:17:17,603 - INFO - Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+2026-02-14 02:18:04,879 - INFO - Load pretrained SentenceTransformer: BAAI/bge-small-en-v1.5
+2026-02-14 02:18:08,651 - INFO - 1 prompt is loaded, with the key: query
+2026-02-14 02:18:08,683 - INFO - Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+2026-02-14 02:19:27,342 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-14 02:19:27,365 - INFO - --- [Identify Primary Function] Item: Personal Deodorant ---
+2026-02-14 02:19:27,734 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-14 02:19:27,737 - INFO - --- [Identify Primary Function] Response: content='The primary function of the item "Personal Deodorant" is "Body odor control and hygiene".' additional_kwargs={} response_metadata={'token_usage': {'completion_tokens': 21, 'prompt_tokens': 205, 'total_tokens': 226, 'completion_time': 0.056416798, 'completion_tokens_details': None, 'prompt_time': 0.021917766, 'prompt_tokens_details': None, 'queue_time': 0.048890845, 'total_time': 0.078334564}, 'model_name': 'llama-3.3-70b-versatile', 'system_fingerprint': 'fp_dae98b5ecb', 'service_tier': 'on_demand', 'finish_reason': 'stop', 'logprobs': None, 'model_provider': 'groq'} id='lc_run--019c583a-b127-70d1-be08-8377a2ec2ea2-0' tool_calls=[] invalid_tool_calls=[] usage_metadata={'input_tokens': 205, 'output_tokens': 21, 'total_tokens': 226} ---
+2026-02-14 02:19:28,167 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-14 02:19:30,256 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-14 02:19:30,626 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-14 02:19:30,631 - INFO - --- [Evaluate Search Results] Input: Personal Deodorant, Primary Function: Body odor control and hygiene ---
+2026-02-14 02:19:31,128 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-14 02:19:31,131 - INFO - --- [Evaluate Search Results] Response: evaluation=[EvaluationItem(search_result='Chapter 33 - Essential oils and resinoids; perfumery, cosmetic or toilet preparations', reasoning='The search result is highly related to the primary function of the item, which is body odor control and hygiene. The result also covers small assorted information, features, etc. of the user input, such as perfumery and cosmetic preparations, which are relevant to personal deodorant.', confidence_score=1.0)] ---
+2026-02-14 02:19:31,419 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-14 02:22:53,626 - INFO - Load pretrained SentenceTransformer: BAAI/bge-small-en-v1.5
+2026-02-14 02:22:57,449 - INFO - 1 prompt is loaded, with the key: query
+2026-02-14 02:22:57,488 - INFO - Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+2026-02-14 02:23:04,286 - INFO - Load pretrained SentenceTransformer: BAAI/bge-small-en-v1.5
+2026-02-14 02:23:08,174 - INFO - 1 prompt is loaded, with the key: query
+2026-02-14 02:23:08,207 - INFO - Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+2026-02-14 02:25:48,323 - INFO - Load pretrained SentenceTransformer: BAAI/bge-small-en-v1.5
+2026-02-14 02:25:52,108 - INFO - 1 prompt is loaded, with the key: query
+2026-02-14 02:25:52,135 - INFO - Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+2026-02-14 02:32:09,433 - INFO - Load pretrained SentenceTransformer: BAAI/bge-small-en-v1.5
+2026-02-14 02:32:13,685 - INFO - 1 prompt is loaded, with the key: query
+2026-02-14 02:32:13,730 - INFO - Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.

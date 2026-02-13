@@ -15,24 +15,6 @@ GROQ_API_KEY=gsk_xxx
 OPENAI_API_KEY=sk-proj-xxx
 ```
 
-## Run with Dockerfile
-
-This may take a long time to build. Can try [Running on local machine](#run-on-local-machine)
-
-```bash
-docker build -t agent-ui --no-cache .
-```
-
-```bash
-docker run -p 8000:8000 --name agent-ui agent-ui
-```
-
-1. NiceGUI UI
-
-Access: `http://localhost:8000/ui`
-
-2. Run agent alone and view CoT in NiceGUI
-
 ## Run on local machine
 
 From the project root, install dependencies and run the UI:
@@ -60,6 +42,45 @@ uvicorn app.main:app --host 0.0.0.0 --port 8000
 
 2. Run agent alone and view CoT in NiceGUI
 
+```bash
+curl --location 'http://localhost:8000/agent' \
+--header 'Content-Type: application/json' \
+--data '{
+    "user_input": "What is the HS-Code of Personal Deodorant?",
+    "model": "llama-3.3-70b-versatile",
+    "host": "cloud groq"
+}'
+```
+
+> Note: The model is llama-3.3-70b-versatile from Cloud Groq by default if no information is provided. Only the following models are supported right now.
+
+```python
+[
+("Cloud OpenAI", "gpt-4o"),
+("Cloud Groq", "llama-3.3-70b-versatile"),
+("Cloud Groq", "llama3.1:8b-instruct-q8_0"),
+("Local", "llama3.1:8b-instruct-q8_0"),
+("Local", "llama3-groq-tool-use"),
+("Local", "mistral:7b"),
+]
+```
+
+## Run with Dockerfile
+
+This may take a long time to build. Can try [Running on local machine](#run-on-local-machine)
+
+```bash
+docker build -t agent-ui --no-cache .
+```
+
+```bash
+docker run -p 8888:8888 --name agent-ui agent-ui
+```
+
+1. NiceGUI UI
+
+Access: `http://localhost:8888/ui`
+
 ---
 
 # Prepare knowledge base
@@ -76,30 +97,6 @@ To run it again:
 python app/index_server_improved.py
 ```
 
-Prompt for worker: explain to them
-
-- HS-Code is Harmonized System Code so that they do need to search.
-- Ask it to give thought process.
-
-* Exactly the same
-  Personal deodorant: I cannot verify if a product called "Personal deodorant" falls under any heading in the table you provided. Can I help you with anything else?
-  Radiator panels: 8504.90.31 and 8504.90.41.
-
-* High ambiguity
-
-Supervisor:
-
-- Only return 1 result
-  - Among all possibilities return by the search agent, give the (score for each + explanation) -> as feedback and choose the best one
-  - Compare it with the threshold: if low then give the whole feedback to the search agent
-- need to identify the main feature of it
-  **The Overlap**: "Modular solar-powered IoT sensors for agricultural moisture tracking.
-  " (Is
-  it 8541 Solar or 9025 Sensors?)
-  -> it is 9025 because its main feature is meter
-  **The Vague Input**: "High-grade industrial polymers for medical 3D printing." (Requires autonomous recursive search for chemical composition).
-  **The Multi-Component**: "Electric vehicle charging station with integrated advertising LED display."
-
 ## Pareto Frontier Evaluation
 
 | Model                              | Latency           | accuracy | Token cost/permit   |
@@ -112,7 +109,7 @@ Supervisor:
 
 ## Chain of Thought
 
-[Add images]
+<video src="docs/vid_cot.mov" controls width="640" title="Chain of Thought demo"></video>
 
 To access Chain of Thought, please access [NiceGUI](#run-on-local-machine) to view all current chains of thought.
 

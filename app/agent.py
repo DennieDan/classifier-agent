@@ -4,20 +4,24 @@ import sys
 import uuid
 from typing import Annotated
 
-from constants import get_cloud_groq_llm, get_cloud_openai_gpt_4o, get_local_ollama_llm
-from langchain_core.messages.tool import tool_call
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.runnables import Runnable, RunnableConfig, RunnableLambda
 from langgraph.graph.message import BaseMessage, add_messages
 from langgraph.graph.state import END, START, StateGraph
-from prompts.supervisor_prompt_tools import SUPERVISOR_PROMPT
-from tools.agent_tools import (
+from typing_extensions import TypedDict
+
+from app.constants import (
+    get_cloud_groq_llm,
+    get_cloud_openai_gpt_4o,
+    get_local_ollama_llm,
+)
+from app.prompts.supervisor_prompt_tools import SUPERVISOR_PROMPT
+from app.tools.agent_tools import (
     evaluate_search_results,
     get_best_confidence_score_and_compare_with_threshold,
     identify_primary_function,
 )
-from tools.regulatory_server import get_regulatory_rules, search_stcced_pdf
-from typing_extensions import TypedDict
+from app.tools.regulatory_server import get_regulatory_rules, search_stcced_pdf
 
 _SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 if _SCRIPT_DIR not in sys.path:
@@ -40,11 +44,11 @@ class ReactGraph:
     def __init__(
         self, model: str = "llama-3.3-70b-versatile", host: str = "cloud groq"
     ):
-        if host == "cloud groq":
+        if host.lower() == "cloud groq":
             self.llm = get_cloud_groq_llm(model=model)
-        elif host == "local":
+        elif host.lower() == "local":
             self.llm = get_local_ollama_llm(model=model)
-        elif host == "cloud openai":
+        elif host.lower() == "cloud openai":
             self.llm = get_cloud_openai_gpt_4o(model=model)
         else:
             raise ValueError(f"Invalid host: {host}")
