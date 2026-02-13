@@ -1,4 +1,4 @@
-from constants import get_ollama_llm
+from constants import get_local_ollama_llm
 from langchain.agents import create_react_agent
 
 # from langchain.agents import AgentExecutor, create_react_agent
@@ -28,7 +28,7 @@ async def setup_agent():
         print(f"Found {len(tools)} tools")
 
         print("Creating LLM...")
-        llm = get_ollama_llm()
+        llm = get_local_ollama_llm(model="llama3.1:8b-instruct-q8_0")
 
         print("Creating agent...")
         prompt = PromptTemplate.from_template(SUPERVISOR_PROMPT)

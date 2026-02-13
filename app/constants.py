@@ -6,10 +6,12 @@ import json
 import os
 from pathlib import Path
 
+import httpx
 from chromadb.api import EMBEDDING_KEY
 from dotenv import load_dotenv
 from langchain_groq import ChatGroq
 from langchain_ollama import ChatOllama
+from ollama import Client as OllamaClient
 
 load_dotenv()
 
@@ -30,18 +32,19 @@ PROJECT_ROOT = os.path.dirname(SCRIPT_DIR)
 CHROMA_PATH = os.path.join(PROJECT_ROOT, "chroma_db")
 
 
-def get_llm():
+def get_cloud_groq_llm(model: str = "llama-3.3-70b-versatile"):
     """Get configured LLM instance."""
-    return ChatGroq(
-        model=LLM_MODEL, temperature=LLM_TEMPERATURE, groq_api_key=LLM_API_KEY
-    )
+    return ChatGroq(model=model, temperature=LLM_TEMPERATURE, groq_api_key=LLM_API_KEY)
 
 
-def get_ollama_llm():
+def get_local_ollama_llm(model: str = "llama3.1:8b-instruct-q8_0"):
     """Get configured Ollama LLM instance."""
     ollama_llm = ChatOllama(
-        model="llama3.1:8b-instruct-q8_0",
+        model=model,
         temperature=0,
+        client=OllamaClient(
+            host="http://localhost:11434", timeout=httpx.Timeout(60.0, read=600.0)
+        ),
         request_timeout=600,
     )
     return ollama_llm

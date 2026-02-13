@@ -8,7 +8,7 @@ _app = _here.parent
 if str(_app) not in sys.path:
     sys.path.insert(0, str(_app))
 
-from constants import get_ollama_llm
+from constants import get_local_ollama_llm
 from graph import logger
 from prompts.evaluate_prompt import EVALUATE_PROMPT
 from prompts.identify_function import IDENTIFY_PRIMARY_FUNCTION_PROMPT
@@ -38,7 +38,7 @@ def evaluate_search_results(
     logger.info(
         f"--- [Evaluate Search Results] Input: {input}, Primary Function: {primary_function} ---"
     )
-    llm = get_ollama_llm()
+    llm = get_local_ollama_llm(model="llama3.1:8b-instruct-q8_0")
     structured_llm = llm.with_structured_output(EvaluateSearchResultsDecision)
     response = structured_llm.invoke(
         EVALUATE_PROMPT.format(
@@ -74,7 +74,7 @@ def identify_primary_function(item: str) -> str:
         The primary function of the item
     """
     logger.info(f"--- [Identify Primary Function] Item: {item} ---")
-    llm = get_ollama_llm()
+    llm = get_local_ollama_llm(model="llama3.1:8b-instruct-q8_0")
     response = llm.invoke(IDENTIFY_PRIMARY_FUNCTION_PROMPT.format(item=item))
     logger.info(f"--- [Identify Primary Function] Response: {response} ---")
     return response

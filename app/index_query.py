@@ -18,13 +18,13 @@ load_dotenv()
 
 
 class IndexQuery:
-    def __init__(self):
+    def __init__(self, model: str = "llama3.1:8b-instruct-q8_0"):
         self.ollama_timeout = httpx.Timeout(60.0, read=600.0)  # 10 min read timeout
         self.ollama_http = OllamaClient(
             host="http://localhost:11434", timeout=self.ollama_timeout
         )
         self.llm = Ollama(
-            model="llama3.1:8b-instruct-q8_0",
+            model=model,
             request_timeout=600.0,
             client=self.ollama_http,
         )

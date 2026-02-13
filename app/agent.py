@@ -4,6 +4,7 @@ import sys
 import uuid
 from typing import Annotated
 
+from constants import get_cloud_groq_llm
 from langchain_core.messages.tool import tool_call
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.runnables import Runnable, RunnableConfig
@@ -32,7 +33,8 @@ from langgraph.prebuilt import ToolNode
 load_dotenv()
 load_dotenv(os.path.join(_SCRIPT_DIR, ".env"))
 
-llm = ChatOllama(model="llama3-groq-tool-use", temperature=0)
+# llm = ChatOllama(model="llama3-groq-tool-use", temperature=0)
+llm = get_cloud_groq_llm(model="llama-3.3-70b-versatile")
 
 
 class State(TypedDict):

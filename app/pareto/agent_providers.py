@@ -42,5 +42,5 @@ def local_llama_3_1_8b_instruct_q8_0(prompt: str, options: dict, context: dict):
 
 
 def cloud_groq_llama_3_3_70b_versatile(prompt: str, options: dict, context: dict):
-    llm = get_cloud_groq_llm(model="llama-3.3-70b-versatile")
+    llm = get_cloud_groq_llm(model="llama-3.3-70b-versatile-q8_0")
     return _run_and_return_output(prompt, options, context, llm=llm)

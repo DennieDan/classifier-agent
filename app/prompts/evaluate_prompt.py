@@ -22,6 +22,6 @@ Output format: JSON with the following keys:
 - evaluation: The list of evaluation results {{\"search_result\": \"the detailed description of the search result\", \"reasoning\": \"feedback on the reasoning for the search result and for the search item\", \"confidence_score\": \"a score between 0.0 and 1.0 representing confidence. 1.0 = Certain.\"}}
 
 User Input: {input}
-Previous Feedback from Supervisor: {previous_feedback}
 Search Results: {search_results}
+Primary Function: {primary_function}
 """

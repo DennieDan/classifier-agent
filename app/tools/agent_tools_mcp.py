@@ -8,7 +8,7 @@ _app = _here.parent
 if str(_app) not in sys.path:
     sys.path.insert(0, str(_app))
 
-from constants import get_ollama_llm
+from constants import get_local_ollama_llm
 from fastmcp import FastMCP
 from graph import logger
 from langchain_core.tools import tool
@@ -39,7 +39,7 @@ def evaluate_search_results(
     return: the evaluation results with confidence score for each possible HS-Code
     """
     logger.info(f"--- [Evaluate Search Results] Input: {input} ---")
-    llm = get_ollama_llm()
+    llm = get_local_ollama_llm(model="llama3.1:8b-instruct-q8_0")
     structured_llm = llm.with_structured_output(EvaluateSearchResultsDecision)
     response = structured_llm.invoke(
         EVALUATE_PROMPT.format(
