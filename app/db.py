@@ -127,3 +127,13 @@ def update_messages_snapshot(permit_id: int, messages_json: str) -> None:
         conn.commit()
     finally:
         conn.close()
+
+
+def delete_conversation(permit_id: int) -> None:
+    """Delete the conversation (permit) with the given id."""
+    conn = _get_conn()
+    try:
+        conn.execute("DELETE FROM permits WHERE id = ?", (permit_id,))
+        conn.commit()
+    finally:
+        conn.close()

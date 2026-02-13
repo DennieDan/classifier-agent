@@ -59,6 +59,11 @@ Method 2: run the code
 | local llama3 groq tool use   | 117s              | High     | 13200 token (local) |
 | local mistral 7b             | Cannot call tools |
 
+# Missing:
+
+- Test with Google AI Studio
+- Ensure Accuracy of the agent
+
 # Acknowledgement:
 
 - NiceGUI implementation by Cursor AI

@@ -5,6 +5,7 @@ import json
 import uuid
 
 from db import (
+    delete_conversation,
     get_conversation,
     get_messages_snapshot,
     init_db,
@@ -54,9 +55,12 @@ def _refresh_sidebar() -> None:
     with conversation_list_container:
         for permit_id, name in list_conversations():
             with ui.row().classes(
-                "w-full items-center gap-2 cursor-pointer hover:bg-gray-100 rounded p-2"
+                "w-full items-center gap-2 cursor-pointer hover:bg-gray-100 rounded p-2 group"
             ).on("click", lambda _, pid=permit_id: _on_select_conversation(pid)):
-                ui.label(_truncate_name(name)).classes("flex-1 truncate")
+                ui.label(_truncate_name(name)).classes("flex-1 truncate min-w-0")
+                ui.button(icon="delete").props("flat round dense").classes(
+                    "opacity-0 group-hover:opacity-100 shrink-0"
+                ).on("click.stop", lambda pid=permit_id: _on_delete_clicked(pid))
         if not list_conversations():
             ui.label("No conversations yet").classes("text-gray-500 italic")
 
@@ -209,6 +213,31 @@ def _on_rename(permit_id: int, current_name: str) -> None:
             _refresh_sidebar()
             if selected_id == pid:
                 _show_conversation_view(pid)
+
+    dialog.open()
+
+
+def _on_delete_clicked(permit_id: int) -> None:
+    """Open confirmation dialog; on confirm, delete conversation and refresh."""
+    with ui.dialog() as dialog, ui.card().classes("min-w-80"):
+        ui.label("Delete this conversation? This cannot be undone.").classes(
+            "text-body"
+        )
+        with ui.row().classes("w-full justify-end gap-2 mt-4"):
+            ui.button("Cancel", on_click=dialog.close)
+            ui.button(
+                "Delete",
+                on_click=lambda: _do_delete(permit_id, dialog),
+            ).props("color=negative unelevated")
+
+    def _do_delete(pid: int, d: ui.dialog) -> None:
+        global selected_id
+        d.close()
+        delete_conversation(pid)
+        if selected_id == pid:
+            selected_id = None
+            _show_input_view()
+        _refresh_sidebar()
 
     dialog.open()
 
