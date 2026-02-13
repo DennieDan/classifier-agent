@@ -72,14 +72,23 @@ def render_message_cards(container: ui.element, messages: list[dict]) -> None:
     Render a list of message dicts (as from messages_to_dict) into HUMAN/AI/TOOL cards.
     Each item in messages should be {"type": "human"|"ai"|"tool", "data": {...}}.
     """
-    container.clear()
-    with container:
-        for item in messages:
-            msg_type = (item.get("type") or "").lower()
-            data = item.get("data") or item
-            if msg_type == "human":
-                _render_human_card(data)
-            elif msg_type == "ai":
-                _render_ai_card(data)
-            elif msg_type == "tool":
-                _render_tool_card(data)
+    if container is None:
+        return
+    try:
+        _ = container.client
+    except RuntimeError:
+        return
+    try:
+        container.clear()
+        with container:
+            for item in messages:
+                msg_type = (item.get("type") or "").lower()
+                data = item.get("data") or item
+                if msg_type == "human":
+                    _render_human_card(data)
+                elif msg_type == "ai":
+                    _render_ai_card(data)
+                elif msg_type == "tool":
+                    _render_tool_card(data)
+    except RuntimeError:
+        pass

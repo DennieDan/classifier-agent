@@ -1,6 +1,6 @@
 import sys
 from pathlib import Path
-from typing import Dict, List, Union
+from typing import List
 
 # Allow running this file directly (e.g. python tools/agent_tools.py): ensure app is on path
 _here = Path(__file__).resolve().parent
@@ -16,11 +16,21 @@ from prompts.evaluate_prompt import EVALUATE_PROMPT
 from pydantic import BaseModel, Field
 
 
+class EvaluationItem(BaseModel):
+    """A single evaluation result. confidence_score must be a number, not an expression."""
+
+    search_result: str = Field(description="One possible result from the search agent")
+    reasoning: str = Field(description="Feedback on the reasoning for the search result")
+    confidence_score: float = Field(
+        ge=0.0,
+        le=1.0,
+        description="A single number between 0.0 and 1.0 (e.g. 0.9 or 1.0). Must be a number only, never a formula.",
+    )
+
+
 class EvaluateSearchResultsDecision(BaseModel):
-    evaluation: List[Dict[str, Union[str, float]]] = Field(
-        description="""The list of evaluation results {\"search_result\": \"one possible result from the search agent\", 
-        \"reasoning\": \"feedback on the reasoning for the search result and for the search item\", 
-        \"confidence_score\": \"a score between 0.0 and 1.0 representing confidence. 1.0 = Certain.\"}"""
+    evaluation: List[EvaluationItem] = Field(
+        description="The list of evaluation results, each with search_result, reasoning, and confidence_score (a number 0.0-1.0)."
     )
 
 

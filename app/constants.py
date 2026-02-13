@@ -65,6 +65,7 @@ def get_cloud_openai_gpt_4o(model: str = "gpt-4o"):
 MODEL_PAIRS: list[tuple[str, str]] = [
     ("Cloud OpenAI", "gpt-4o"),
     ("Cloud Groq", "llama-3.3-70b-versatile"),
+    ("Cloud Groq", "llama3.1:8b-instruct-q8_0"),
     ("Local", "llama3.1:8b-instruct-q8_0"),
     ("Local", "llama3-groq-tool-use"),
     ("Local", "mistral:7b"),

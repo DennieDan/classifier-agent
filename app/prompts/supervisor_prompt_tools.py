@@ -37,6 +37,7 @@ Use the following tools to response to the lastest query, either from AI or user
 - When searching, search for the Chapters/Headings/Subheadings that the PRIMARY FUNCTION falls in, not the whole item description
 - When searching, query it for the reasoning of the search results.
 - Make sure you call 'evaluate_search_results' after any search.
+- If receive tool call error, you must retry the tool call with improved parameters.
 
 ### OUTPUT
 You MUST call a tool to progress. Only return text if you are providing the Final Answer. You cannot provide Final Answer without calling evaluate_search_results tool first.

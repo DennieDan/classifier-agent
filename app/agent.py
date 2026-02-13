@@ -91,7 +91,7 @@ class Supervisor:
         # Ensure the LLM sees the FULL history from the state
         # ChatPromptTemplate expects a mapping (dict); the template has placeholder "{messages}"
         while True:
-            result = self.runnable.invoke(state)
+            result = self.runnable.invoke(state, config)
             if not result.tool_calls and (
                 not result.content
                 or isinstance(result.content, list)

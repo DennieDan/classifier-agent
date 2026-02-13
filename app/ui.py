@@ -1,6 +1,5 @@
 """NiceGUI interface: sidebar conversation list, main input/process/conversation view."""
 
-import asyncio
 import json
 import uuid
 
@@ -22,7 +21,7 @@ from nicegui import background_tasks, ui
 # State
 selected_id: int | None = None
 current_permit_id: int | None = None  # New conversation being "processed" (placeholder)
-process_container: ui.element | None = None
+in_progress_ids: set[int] = set()
 main_content: ui.element | None = None
 conversation_list_container: ui.element | None = None
 
@@ -53,19 +52,19 @@ def _refresh_sidebar() -> None:
         return
     try:
         conversation_list_container.clear()
+        with conversation_list_container:
+            for permit_id, name in list_conversations():
+                with ui.row().classes(
+                    "w-full items-center gap-2 cursor-pointer hover:bg-gray-100 rounded p-2 group"
+                ).on("click", lambda _, pid=permit_id: _on_select_conversation(pid)):
+                    ui.label(_truncate_name(name)).classes("flex-1 truncate min-w-0")
+                    ui.button(icon="delete").props("flat round dense").classes(
+                        "opacity-0 group-hover:opacity-100 shrink-0"
+                    ).on("click.stop", lambda pid=permit_id: _on_delete_clicked(pid))
+            if not list_conversations():
+                ui.label("No conversations yet").classes("text-gray-500 italic")
     except RuntimeError:
-        return
-    with conversation_list_container:
-        for permit_id, name in list_conversations():
-            with ui.row().classes(
-                "w-full items-center gap-2 cursor-pointer hover:bg-gray-100 rounded p-2 group"
-            ).on("click", lambda _, pid=permit_id: _on_select_conversation(pid)):
-                ui.label(_truncate_name(name)).classes("flex-1 truncate min-w-0")
-                ui.button(icon="delete").props("flat round dense").classes(
-                    "opacity-0 group-hover:opacity-100 shrink-0"
-                ).on("click.stop", lambda pid=permit_id: _on_delete_clicked(pid))
-        if not list_conversations():
-            ui.label("No conversations yet").classes("text-gray-500 italic")
+        pass
 
 
 def _on_select_conversation(permit_id: int) -> None:
@@ -150,35 +149,20 @@ def _messages_to_dict_list(messages) -> list:
     return messages_to_dict(list(messages))
 
 
-async def _run_agent_streaming(
+async def _run_agent_background(
     permit_id: int, user_input: str, model: str, host: str
 ) -> None:
-    """Run the agent with astream and update the UI on each chunk. Save result to DB when done."""
+    """Run the agent to completion in the background; save result to DB when done."""
     from agent import ReactGraph
 
-    if main_content is None:
-        return
-    react = ReactGraph(model=model, host=host)
-    config = {"configurable": {"thread_id": str(uuid.uuid4())}}
+    in_progress_ids.add(permit_id)
     try:
-        async for state in react.graph.astream(
+        react = ReactGraph(model=model, host=host)
+        config = {"configurable": {"thread_id": str(uuid.uuid4())}}
+        state = await react.graph.ainvoke(
             {"messages": ("user", user_input)},
             config=config,
-            stream_mode="values",
-        ):
-            if not _client_still_valid(main_content):
-                break
-            messages = state.get("messages") or []
-            if not messages:
-                continue
-            try:
-                messages_dict = _messages_to_dict_list(messages)
-                render_message_cards(main_content, messages_dict)
-            except RuntimeError:
-                break
-            except Exception:
-                pass
-        # Final state: always persist to DB
+        )
         messages = state.get("messages") or []
         final_content = (messages[-1].content or "") if messages else ""
         update_response(permit_id, final_content)
@@ -187,29 +171,16 @@ async def _run_agent_streaming(
             update_messages_snapshot(permit_id, json.dumps(messages_dict, default=str))
         except Exception:
             pass
-        if _client_still_valid(conversation_list_container):
-            _refresh_sidebar()
     except Exception as e:
         update_response(permit_id, str(e))
-        if _client_still_valid(main_content):
+    finally:
+        in_progress_ids.discard(permit_id)
+        if _client_still_valid(main_content) and selected_id == permit_id:
             try:
-                main_content.clear()
-                with main_content:
-                    ui.label(f"Error: {e}").classes("text-red-600")
+                _show_conversation_view(permit_id)
+                _refresh_sidebar()
             except RuntimeError:
                 pass
-
-
-def _show_process_view(permit_id: int, prompt: str, model: str, host: str) -> None:
-    """Show 'Running...' and start streaming the agent; cards update as chunks arrive."""
-    if main_content is None:
-        return
-    main_content.clear()
-    with main_content:
-        with ui.column().classes("w-full max-w-2xl gap-4"):
-            ui.label("Running...").classes("text-lg text-gray-600")
-            ui.spinner(size="lg")
-    background_tasks.create(_run_agent_streaming(permit_id, prompt, model, host))
 
 
 def _on_rename(permit_id: int, current_name: str) -> None:
@@ -263,6 +234,20 @@ def _show_conversation_view(permit_id: int) -> None:
     if main_content is None or row is None:
         return
     _, name, prompt, response = row
+    if permit_id in in_progress_ids:
+        main_content.clear()
+        with main_content:
+            with ui.column().classes("w-full max-w-2xl gap-4"):
+                with ui.row().classes("w-full items-center gap-2"):
+                    ui.label(name).classes("text-lg font-medium flex-1")
+                    ui.button(
+                        icon="edit", on_click=lambda: _on_rename(permit_id, name)
+                    ).props("flat round").tooltip("Rename")
+                ui.label("Prompt").classes("font-medium text-gray-600")
+                ui.label(prompt).classes("w-full rounded border p-4 bg-gray-50")
+                ui.label("In progress").classes("font-medium text-gray-600 mt-2")
+                ui.spinner(size="lg")
+        return
     snapshot = get_messages_snapshot(permit_id)
     main_content.clear()
     with main_content:
@@ -309,9 +294,11 @@ def _on_submit(
     )
     permit_id = insert_conversation(name=name, prompt=text.strip(), response="")
     current_permit_id = permit_id
-    selected_id = None
+    in_progress_ids.add(permit_id)
+    background_tasks.create(_run_agent_background(permit_id, text.strip(), model=model, host=host))
+    selected_id = permit_id
     _refresh_sidebar()
-    _show_process_view(permit_id, text.strip(), model=model, host=host)
+    _show_conversation_view(permit_id)
 
 
 def _on_new_conversation() -> None:
