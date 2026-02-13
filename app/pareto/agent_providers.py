@@ -20,7 +20,7 @@ def _run_and_return_output(
     options: dict,
     context: dict,
     *,
-    model: str = "llama-3.3-70b-versatile-q8_0",
+    model: str = "llama-3.3-70b-versatile",
     host: str
 ):
     agent = ReactGraph(model=model, host=host)

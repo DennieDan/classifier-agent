@@ -38,7 +38,7 @@ load_dotenv(os.path.join(_SCRIPT_DIR, ".env"))
 
 class ReactGraph:
     def __init__(
-        self, model: str = "llama-3.3-70b-versatile-q8_0", host: str = "cloud groq"
+        self, model: str = "llama-3.3-70b-versatile", host: str = "cloud groq"
     ):
         if host == "cloud groq":
             self.llm = get_cloud_groq_llm(model=model)
