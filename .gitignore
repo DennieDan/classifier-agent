@@ -51,3 +51,6 @@ log.txt
 htmlcov/
 .tox/
 .nox/
+
+# ChromaDB (large; regenerate with: python app/index_server_improved.py)
+chroma_db/
