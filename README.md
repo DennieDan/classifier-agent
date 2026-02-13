@@ -1,8 +1,23 @@
 # Adatacom Autonomous Regulatory Auditor Agent
 
+![Mainpage](docs/input.png)
+![ChainofThought](docs/cot.png)
+
 ## Project Structure
 
+## ENV
+
+`.env`
+
+```bash
+LLAMA_PARSE_API_KEY=llx-xxx
+GROQ_API_KEY=gsk_xxx
+OPENAI_API_KEY=sk-proj-xxx
+```
+
 ## Run with Dockerfile
+
+This may take a long time to build. Can try [Running on local machine](#run-on-local-machine)
 
 ```bash
 docker build -t agent-ui --no-cache .
@@ -14,27 +29,51 @@ docker run -p 8000:8000 --name agent-ui agent-ui
 
 1. NiceGUI UI
 
+Access: `http://localhost:8000/ui`
+
 2. Run agent alone and view CoT in NiceGUI
 
-## NiceGUI interface
+## Run on local machine
 
 From the project root, install dependencies and run the UI:
 
 ```bash
 pip install -r requirements.txt
-python run_ui.py
 ```
 
-Then open [http://localhost:8080](http://localhost:8080) in your browser. The UI has a left sidebar with conversation list, a main area for input (or process/conversation view), and a plus button (top right) to start a new prompt.
+To run local model, install them:
+
+```bash
+ollama run llama3.1:8b-instruct-q8_0
+ollama run llama3-groq-tool-use
+ollama run mistral:7b
+```
+
+Run the FastAPI server
+
+```bash
+uvicorn app.main:app --host 0.0.0.0 --port 8000
+```
+
+1. NiceGUI
+   Open [http://localhost:8000/ui](http://localhost:8000/ui) in your browser. The UI has a left sidebar with conversation list, a main area for input (or process/conversation view), and a plus button (top right) to start a new prompt.
+
+2. Run agent alone and view CoT in NiceGUI
 
 ---
 
-```bash
-docker build -t classifier-agent --no-cache .
-```
+# Prepare knowledge base
+
+The Knowledge base is prepared for LLM model `llama3.1:8b-instruct-q8_0` and Embedding Model `BAAI/bge-small-en-v1.5` (free from HuggingFace)
+
+Therefore, the search tool in `regulatory_server.py` is always used with LLM model `llama3.1:8b-instruct-q8_0`. (More adjustment will be done in the future)
+
+Knowledge base is already prepared and store in ChromaDB with this repository.
+
+To run it again:
 
 ```bash
-docker run -p 8000:8000 --name classifier-agent classifier-agent
+python app/index_server_improved.py
 ```
 
 Prompt for worker: explain to them
@@ -61,42 +100,6 @@ Supervisor:
   **The Vague Input**: "High-grade industrial polymers for medical 3D printing." (Requires autonomous recursive search for chemical composition).
   **The Multi-Component**: "Electric vehicle charging station with integrated advertising LED display."
 
-# Run the agent
-
-`.env`
-
-```
-LLAMA_PARSE_API_KEY=llx-xxx
-GROQ_API_KEY=gsk_xxx
-OPENAI_API_KEY=sk-proj-xxx
-```
-
-To run local model, install them:
-
-```bash
-ollama run llama3.1:8b-instruct-q8_0
-ollama run llama3-groq-tool-use
-ollama run mistral:7b
-```
-
-2 ways:
-Method 1: Use the NiceGUI
-Method 2: run the code
-
-# Prepare knowledge base
-
-The Knowledge base is prepared for LLM model `llama3.1:8b-instruct-q8_0` and Embedding Model `BAAI/bge-small-en-v1.5` (free from HuggingFace)
-
-Therefore, the search tool in `regulatory_server.py` is always used with LLM model `llama3.1:8b-instruct-q8_0`. (More adjustment will be done in the future)
-
-Knowledge base is already prepared and store in ChromaDB with this repository.
-
-To run it again:
-
-```bash
-python app/index_server_improved.py
-```
-
 ## Pareto Frontier Evaluation
 
 | Model                              | Latency           | accuracy | Token cost/permit   |
@@ -106,6 +109,12 @@ python app/index_server_improved.py
 | local llama3.1:8b-instruct-q8_0    | 112s              |          | 41000 token (local) |
 | local llama3-groq-tool-use         | 117s              | High     | 13200 token (local) |
 | local mistral:7b                   | Cannot call tools |
+
+## Chain of Thought
+
+[Add images]
+
+To access Chain of Thought, please access [NiceGUI](#run-on-local-machine) to view all current chains of thought.
 
 # Missing:
 
