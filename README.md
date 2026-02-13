@@ -3,8 +3,6 @@
 ![Mainpage](docs/input.png)
 ![ChainofThought](docs/cot.png)
 
-## Project Structure
-
 ## Set up
 
 `.env`
@@ -29,7 +27,7 @@ ollama run llama3-groq-tool-use # optional
 ollama run mistral:7b # optional
 ```
 
-# Prepare knowledge base
+## Prepare knowledge base
 
 The Knowledge base is prepared for LLM model `llama3.1:8b-instruct-q8_0` and Embedding Model `BAAI/bge-small-en-v1.5` (free from HuggingFace)
 
@@ -119,11 +117,12 @@ Access: `http://localhost:8888/ui`
 
 To access Chain of Thought, please access [NiceGUI](#run-on-local-machine) to view all current chains of thought.
 
-# Missing:
+# What is still Missing?
 
-- Test with Google AI Studio
-- Ensure Accuracy of the agent
+- Ensure Accuracy of the agent in different models
+- Latency is still higher than the required threshold
+- Dockerfile run requires more testing, still not stable
 
-# Acknowledgement:
+# Acknowledgement
 
 - NiceGUI implementation by Cursor AI
