@@ -150,7 +150,7 @@ primary_supervisor_prompt = ChatPromptTemplate.from_messages(
 #     ]
 # )
 
-llm = get_cloud_groq_llm(model="llama-3.3-70b-versatile-q8_0")
+llm = get_cloud_groq_llm(model="llama-3.3-70b-versatile")
 supervisor_runnable = primary_supervisor_prompt | llm.bind_tools(tools)
 
 

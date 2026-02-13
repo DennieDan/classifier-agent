@@ -80,8 +80,8 @@ if __name__ == "__main__":
     # retrieval_result = index_query.index_query(query=user_input_2)
     # print(retrieval_result)
 
-    # result = run_graph(user_input_polymer)
-    # print(result)
+    result = run_graph(user_input_1)
+    print(result["messages"])
 
     # async def main():
     #     result = await run_agent(user_input_1)
@@ -89,5 +89,5 @@ if __name__ == "__main__":
 
     # asyncio.run(main())
 
-    result = cloud_groq_llama_3_3_70b_versatile(user_input_1)
-    print(result)
+    # result = cloud_groq_llama_3_3_70b_versatile(user_input_1)
+    # print(result)

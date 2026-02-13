@@ -44,6 +44,9 @@ env/
 # Logs
 log.txt
 
+# App data (SQLite)
+app/data/
+
 # Testing / coverage
 .pytest_cache/
 .coverage

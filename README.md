@@ -1,3 +1,16 @@
+## NiceGUI interface
+
+From the project root, install dependencies and run the UI:
+
+```bash
+pip install -r requirements.txt
+python run_ui.py
+```
+
+Then open [http://localhost:8080](http://localhost:8080) in your browser. The UI has a left sidebar with conversation list, a main area for input (or process/conversation view), and a plus button (top right) to start a new prompt.
+
+---
+
 ```bash
 docker build -t classifier-agent --no-cache .
 ```
@@ -32,9 +45,10 @@ Supervisor:
 
 ## Pareto Frontier Evaluation
 
-| Model                      | Latency           | accuracy | Token cost/permit   |
-| -------------------------- | ----------------- | -------- | ------------------- |
-| cloud openai gpt4o         | 125s              |          | 5700 token/$0.0108  |
-| local llama3.1 8b          | 112s              |          | 41000 token (local) |
-| local llama3 groq tool use | 117s              | High     | 13200 token (local) |
-| local mistral 7b           | Cannot call tools |
+| Model                        | Latency           | accuracy | Token cost/permit   |
+| ---------------------------- | ----------------- | -------- | ------------------- |
+| cloud openai gpt4o           | 125s              |          | 5700 token/$0.0108  |
+| cloud llama3.3-70b-versatile | 110s              |          | 27900 token/$0.00   |
+| local llama3.1 8b            | 112s              |          | 41000 token (local) |
+| local llama3 groq tool use   | 117s              | High     | 13200 token (local) |
+| local mistral 7b             | Cannot call tools |
