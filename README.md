@@ -1,3 +1,21 @@
+# Adatacom Autonomous Regulatory Auditor Agent
+
+## Project Structure
+
+## Run with Dockerfile
+
+```bash
+docker build -t agent-ui --no-cache .
+```
+
+```bash
+docker run -p 8000:8000 --name agent-ui agent-ui
+```
+
+1. NiceGUI UI
+
+2. Run agent alone and view CoT in NiceGUI
+
 ## NiceGUI interface
 
 From the project root, install dependencies and run the UI:
