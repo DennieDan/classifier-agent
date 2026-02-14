@@ -113,9 +113,9 @@ Access: `http://localhost:8888/ui`
 
 ## Chain of Thought
 
-<video src="docs/vid_cot.mov" controls width="640" title="Chain of Thought demo"></video>
-
 To access Chain of Thought, please access [NiceGUI](#run-on-local-machine) to view all current chains of thought.
+
+https://github.com/user-attachments/assets/4c9ca981-8997-4503-b459-5e8e0f6e4689
 
 # What is still Missing?
 
