@@ -29,11 +29,11 @@ ollama run mistral:7b # optional
 
 ## Prepare knowledge base
 
-The Knowledge base is prepared for LLM model `llama3.1:8b-instruct-q8_0` and Embedding Model `BAAI/bge-small-en-v1.5` (free from HuggingFace)
+The Knowledge base is prepared for LLM model `llama3.1:8b-instruct-q8_0` and Embedding Model `BAAI/bge-small-en-v1.5` (free from HuggingFace). Knowledge base is built on the file [stcced2022.pdf](/app/resources/stcced2022.pdf)
 
 Therefore, the search tool in `regulatory_server.py` is always used with LLM model `llama3.1:8b-instruct-q8_0`. (More adjustment will be done in the future)
 
-The file `stcced2022.pdf` is already parsed using LlamaParse and stored as `docs.md`
+The file [`stcced2022.pdf`](/app/resources/stcced2022.pdf) is already parsed using LlamaParse and stored as `docs.md`
 
 To build the index (takes 32 seconds):
 
