@@ -1,4 +1,4 @@
-# Adatacom Autonomous Regulatory Auditor Agent
+# Autonomous Regulatory Auditor Agent
 
 ![Mainpage](docs/input.png)
 ![ChainofThought](docs/cot.png)
