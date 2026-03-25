@@ -3,6 +3,8 @@
 import json
 import uuid
 
+from nicegui import background_tasks, ui
+
 from app.constants import MODEL_PAIRS
 from app.db import (
     delete_conversation,
@@ -16,7 +18,6 @@ from app.db import (
     update_response,
 )
 from app.message_components import render_message_cards
-from nicegui import background_tasks, ui
 
 # State
 selected_id: int | None = None
@@ -75,12 +76,13 @@ def _on_select_conversation(permit_id: int) -> None:
 
 
 # All unique model ids from MODEL_PAIRS (order preserved)
-MODEL_OPTIONS = list(dict.fromkeys(m for _, m in MODEL_PAIRS))
+# MODEL_OPTIONS = list(dict.fromkeys(m for _, m in MODEL_PAIRS))
+MODEL_OPTIONS = list(dict.fromkeys(m for h, m in MODEL_PAIRS if h != "Local"))
 
 # Map UI host label to agent ReactGraph host argument
 HOST_TO_AGENT = {
     "Cloud Groq": "cloud groq",
-    "Local": "local",
+    # "Local": "local",  # Disabled on UI (requires Ollama at localhost:11434)
     "Cloud OpenAI": "cloud openai",
 }
 
@@ -100,7 +102,11 @@ def _show_input_view() -> None:
             with ui.row().classes("w-full gap-4 items-center"):
                 host_select = (
                     ui.select(
-                        options=["Cloud Groq", "Local", "Cloud OpenAI"],
+                        options=[
+                            "Cloud Groq",
+                            # "Local",
+                            "Cloud OpenAI",
+                        ],
                         value="Cloud Groq",
                         label="Host",
                     )
@@ -123,6 +129,9 @@ def _show_input_view() -> None:
                 ).classes("text-sm font-medium text-gray-700")
                 with ui.column().classes("w-full mt-2 gap-1"):
                     for host_label, model_id in MODEL_PAIRS:
+                        if host_label == "Local":
+                            # Local is disabled on UI (requires Ollama at localhost:11434)
+                            continue
                         ui.label(f"• {host_label}: {model_id}").classes(
                             "text-sm text-gray-600"
                         )
@@ -295,7 +304,9 @@ def _on_submit(
     permit_id = insert_conversation(name=name, prompt=text.strip(), response="")
     current_permit_id = permit_id
     in_progress_ids.add(permit_id)
-    background_tasks.create(_run_agent_background(permit_id, text.strip(), model=model, host=host))
+    background_tasks.create(
+        _run_agent_background(permit_id, text.strip(), model=model, host=host)
+    )
     selected_id = permit_id
     _refresh_sidebar()
     _show_conversation_view(permit_id)

@@ -4626,3 +4626,84 @@ Stack (most recent call last):
 2026-02-14 02:32:09,433 - INFO - Load pretrained SentenceTransformer: BAAI/bge-small-en-v1.5
 2026-02-14 02:32:13,685 - INFO - 1 prompt is loaded, with the key: query
 2026-02-14 02:32:13,730 - INFO - Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+2026-03-25 22:53:25,180 - INFO - Load pretrained SentenceTransformer: BAAI/bge-small-en-v1.5
+2026-03-25 22:53:29,221 - INFO - 1 prompt is loaded, with the key: query
+2026-03-25 22:53:29,312 - INFO - Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+2026-03-25 22:54:20,385 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 22:54:20,403 - INFO - --- [Identify Primary Function] Item: Macbook Pro laptop ---
+2026-03-25 22:54:21,007 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 22:54:21,010 - INFO - --- [Identify Primary Function] Response: content='The primary function of the item is: "Computer"' additional_kwargs={} response_metadata={'token_usage': {'completion_tokens': 12, 'prompt_tokens': 205, 'total_tokens': 217, 'completion_time': 0.036040716, 'completion_tokens_details': None, 'prompt_time': 0.066671814, 'prompt_tokens_details': None, 'queue_time': 0.35795549, 'total_time': 0.10271253}, 'model_name': 'llama-3.3-70b-versatile', 'system_fingerprint': 'fp_68f543a7cc', 'service_tier': 'on_demand', 'finish_reason': 'stop', 'logprobs': None, 'model_provider': 'groq'} id='lc_run--019d257d-4713-7473-a141-c69f18042778-0' tool_calls=[] invalid_tool_calls=[] usage_metadata={'input_tokens': 205, 'output_tokens': 12, 'total_tokens': 217} ---
+2026-03-25 22:54:21,507 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 22:54:24,417 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 22:54:25,390 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 22:54:25,397 - INFO - --- [Evaluate Search Results] Input: Macbook Pro laptop, Primary Function: Computer ---
+2026-03-25 22:54:26,377 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 22:54:26,381 - INFO - --- [Evaluate Search Results] Response: evaluation=[EvaluationItem(search_result='Macbook Pro laptop falls under Chapter 84, which covers machinery and mechanical appliances, and more specifically under Heading 84.71, which covers automatic data processing machines and units thereof', reasoning='The primary function of a Macbook Pro laptop is as a computer, which aligns with the description of Heading 84.71. The search result provides a specific and relevant classification for the item, covering its primary function and providing a clear heading and chapter.', confidence_score=1.0)] ---
+2026-03-25 22:54:27,064 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 22:54:27,586 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 22:54:28,114 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 22:54:28,866 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 22:56:38,630 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 22:56:38,641 - INFO - --- [Identify Primary Function] Item: portable aircon with sleeping light ---
+2026-03-25 22:56:39,188 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 22:56:39,190 - INFO - --- [Identify Primary Function] Response: content='The primary function of the item is "Air conditioner"' additional_kwargs={} response_metadata={'token_usage': {'completion_tokens': 12, 'prompt_tokens': 207, 'total_tokens': 219, 'completion_time': 0.056219919, 'completion_tokens_details': None, 'prompt_time': 0.037535932, 'prompt_tokens_details': None, 'queue_time': 0.319878897, 'total_time': 0.093755851}, 'model_name': 'llama-3.3-70b-versatile', 'system_fingerprint': 'fp_43d97c5965', 'service_tier': 'on_demand', 'finish_reason': 'stop', 'logprobs': None, 'model_provider': 'groq'} id='lc_run--019d257f-631b-7da1-8028-e35c6e211362-0' tool_calls=[] invalid_tool_calls=[] usage_metadata={'input_tokens': 207, 'output_tokens': 12, 'total_tokens': 219} ---
+2026-03-25 22:56:39,952 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 22:56:42,680 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 22:56:43,052 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 22:56:43,058 - INFO - --- [Evaluate Search Results] Input: portable aircon with sleeping light, Primary Function: Air conditioner ---
+2026-03-25 22:56:44,078 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 22:56:44,081 - INFO - --- [Evaluate Search Results] Response: evaluation=[EvaluationItem(search_result='841510 - Air conditioning machines, comprising a motor-driven fan and elements for changing the temperature and humidity, including those machines in which the humidity cannot be separately regulated', reasoning='The search result is highly related to the primary function of the item, which is an air conditioner. The result also covers specific features of the user input, such as the aircon being portable and having a sleeping light, although these features are not explicitly mentioned in the search result, the HS-Code provided does relate to air conditioning machines. The result is specific and provides a clear HS-Code for the item.', confidence_score=0.9)] ---
+2026-03-25 22:56:44,565 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 22:56:45,076 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 22:56:48,048 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 22:56:48,558 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 22:56:48,568 - INFO - --- [Evaluate Search Results] Input: portable aircon with sleeping light, Primary Function: Air conditioner ---
+2026-03-25 22:56:49,586 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 22:56:49,589 - INFO - --- [Evaluate Search Results] Response: evaluation=[EvaluationItem(search_result='8415.10 - Portable air conditioner with a sleeping light function', reasoning='The search result is highly related to the primary function of the item, which is an air conditioner. The result also covers the specific feature of the item, which is the sleeping light. The reasoning is good and specific, with a clear heading and subheading.', confidence_score=1.0)] ---
+2026-03-25 22:56:50,095 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 22:56:50,909 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 22:56:51,696 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 22:56:52,144 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 22:56:52,654 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 22:56:53,528 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 22:56:54,259 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 22:56:54,773 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 22:56:55,783 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 22:56:56,464 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 22:56:57,229 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 22:56:58,027 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 22:56:58,494 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 22:56:59,003 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 22:56:59,515 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 22:57:00,377 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 23:27:11,466 - INFO - Load pretrained SentenceTransformer: BAAI/bge-small-en-v1.5
+2026-03-25 23:27:15,286 - INFO - 1 prompt is loaded, with the key: query
+2026-03-25 23:27:15,343 - INFO - Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+2026-03-25 23:27:46,071 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 404 Not Found"
+2026-03-25 23:30:30,715 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 23:30:30,735 - INFO - --- [Identify Primary Function] Item: Shrimp Paste ---
+2026-03-25 23:30:31,286 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 23:30:31,302 - INFO - --- [Identify Primary Function] Response: content='The primary function of the item "Shrimp Paste" is "Food ingredient" or more specifically, "Condiment".' additional_kwargs={} response_metadata={'token_usage': {'completion_tokens': 25, 'prompt_tokens': 204, 'total_tokens': 229, 'completion_time': 0.07340843, 'completion_tokens_details': None, 'prompt_time': 0.039917349, 'prompt_tokens_details': None, 'queue_time': 0.308771967, 'total_time': 0.113325779}, 'model_name': 'llama-3.3-70b-versatile', 'system_fingerprint': 'fp_45180df409', 'service_tier': 'on_demand', 'finish_reason': 'stop', 'logprobs': None, 'model_provider': 'groq'} id='lc_run--019d259e-64f5-77b3-bc7b-c8244d5ba0ad-0' tool_calls=[] invalid_tool_calls=[] usage_metadata={'input_tokens': 204, 'output_tokens': 25, 'total_tokens': 229} ---
+2026-03-25 23:30:32,991 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 23:30:34,834 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 23:30:36,696 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 23:30:36,709 - INFO - --- [Evaluate Search Results] Input: Shrimp Paste, Primary Function: Condiment ---
+2026-03-25 23:30:37,443 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 23:30:37,447 - INFO - --- [Evaluate Search Results] Response: evaluation=[EvaluationItem(search_result="The item 'Shrimp Paste' falls under Chapter 21.01", reasoning="The search result is related to the primary function of the item 'Shrimp Paste' as a condiment. The result provides a specific chapter number and describes the category of preparations that the item belongs to, including sauces.", confidence_score=0.9)] ---
+2026-03-25 23:30:37,804 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-03-25 23:30:37,805 - INFO - Retrying request to /chat/completions in 20.000000 seconds
+2026-03-25 23:30:59,556 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 23:33:03,940 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 23:33:03,949 - INFO - --- [Identify Primary Function] Item: Shrimp paste ---
+2026-03-25 23:33:04,295 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 23:33:04,297 - INFO - --- [Identify Primary Function] Response: content='The primary function of the item "Shrimp paste" is "Food ingredient" or more specifically, "Condiment".' additional_kwargs={} response_metadata={'token_usage': {'completion_tokens': 25, 'prompt_tokens': 204, 'total_tokens': 229, 'completion_time': 0.07412088, 'completion_tokens_details': None, 'prompt_time': 0.026130235, 'prompt_tokens_details': None, 'queue_time': 0.101801743, 'total_time': 0.100251115}, 'model_name': 'llama-3.3-70b-versatile', 'system_fingerprint': 'fp_68f543a7cc', 'service_tier': 'on_demand', 'finish_reason': 'stop', 'logprobs': None, 'model_provider': 'groq'} id='lc_run--019d25a0-bb76-7e03-a337-4bf13cdb5576-0' tool_calls=[] invalid_tool_calls=[] usage_metadata={'input_tokens': 204, 'output_tokens': 25, 'total_tokens': 229} ---
+2026-03-25 23:33:04,748 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 23:33:06,510 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 23:33:06,855 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 23:33:06,861 - INFO - --- [Evaluate Search Results] Input: Shrimp paste from Vietnam, Primary Function: Condiment ---
+2026-03-25 23:33:07,442 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 23:33:07,445 - INFO - --- [Evaluate Search Results] Response: evaluation=[EvaluationItem(search_result='Chapter 21.01: preparations of vegetables, fruit, nuts, or other parts of plants, including pickle, chutney, mustard, ketchup, and other sauces, which includes shrimp paste from Vietnam as a condiment', reasoning='The search result is highly related to the primary function of the item, which is a condiment. The result also covers specific headings and subheadings, and provides some assorted information about the product.', confidence_score=0.9)] ---
+2026-03-25 23:33:07,932 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 23:33:08,856 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 23:33:09,370 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 23:33:09,775 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
