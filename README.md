@@ -3,6 +3,8 @@
 ![Mainpage](docs/input.png)
 ![ChainofThought](docs/cot.png)
 
+https://github.com/user-attachments/assets/ab5e326f-c736-408b-b9ac-30b2c7676590
+
 ## Set up
 
 `.env`
