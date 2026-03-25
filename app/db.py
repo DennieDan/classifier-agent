@@ -6,7 +6,9 @@ from typing import Optional
 
 _SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 _DB_DIR = os.path.join(_SCRIPT_DIR, "data")
-_DB_PATH = os.path.join(_DB_DIR, "conversations.db")
+_DEFAULT_DB_PATH = os.path.join(_DB_DIR, "conversations.db")
+_DB_PATH = os.getenv("SQLITE_DB_PATH") or _DEFAULT_DB_PATH
+_DB_DIR = os.path.dirname(_DB_PATH)
 
 
 def _get_conn() -> sqlite3.Connection:

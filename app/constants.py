@@ -31,7 +31,9 @@ EMBED_MODEL = "BAAI/bge-small-en-v1.5"
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 PROJECT_ROOT = os.path.dirname(SCRIPT_DIR)
-CHROMA_PATH = os.path.join(PROJECT_ROOT, "chroma_db")
+# Allow overriding persistence paths for deployments (e.g. Render disk mount).
+# Default remains within the repo for local development.
+CHROMA_PATH = os.getenv("CHROMA_PATH") or os.path.join(PROJECT_ROOT, "chroma_db")
 
 
 def get_cloud_groq_llm(model: str = "llama-3.3-70b-versatile"):

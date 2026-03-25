@@ -4707,3 +4707,6 @@ Stack (most recent call last):
 2026-03-25 23:33:08,856 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
 2026-03-25 23:33:09,370 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
 2026-03-25 23:33:09,775 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 23:59:21,997 - INFO - Load pretrained SentenceTransformer: BAAI/bge-small-en-v1.5
+2026-03-25 23:59:26,033 - INFO - 1 prompt is loaded, with the key: query
+2026-03-25 23:59:26,074 - INFO - Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
