@@ -2,12 +2,9 @@
 Constants and shared configuration for the travel planner.
 """
 
-import json
 import os
-from pathlib import Path
 
 import httpx
-from chromadb.api import EMBEDDING_KEY
 from dotenv import load_dotenv
 from langchain_groq import ChatGroq
 from langchain_ollama import ChatOllama
