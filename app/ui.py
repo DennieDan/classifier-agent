@@ -162,7 +162,11 @@ async def _run_agent_background(
     permit_id: int, user_input: str, model: str, host: str
 ) -> None:
     """Run the agent to completion in the background; save result to DB when done."""
-    from agent import ReactGraph
+    try:
+        from app.agent import ReactGraph
+    except ImportError:
+        # Fallback for running this file from within `app/`
+        from agent import ReactGraph
 
     in_progress_ids.add(permit_id)
     try:

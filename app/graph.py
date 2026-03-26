@@ -10,7 +10,10 @@ from typing import Annotated, Dict, List, Literal, TypedDict, Union
 _GRAPH_DIR = os.path.dirname(os.path.abspath(__file__))
 _TOOLS_DIR = os.path.join(_GRAPH_DIR, "tools")
 
-from index_query import IndexQuery
+try:
+    from app.index_query import IndexQuery
+except ImportError:
+    from index_query import IndexQuery
 from langchain_core.language_models import BaseChatModel
 from langchain_core.messages import (
     AIMessage,
@@ -21,8 +24,12 @@ from langchain_core.messages import (
 )
 from langchain_mcp_adapters.client import MultiServerMCPClient
 from langgraph.graph import END, START, StateGraph
-from prompts.search_prompt import SEARCH_PROMPT
-from prompts.supervisor_prompt import SUPERVISOR_PROMPT
+try:
+    from app.prompts.search_prompt import SEARCH_PROMPT
+    from app.prompts.supervisor_prompt import SUPERVISOR_PROMPT
+except ImportError:
+    from prompts.search_prompt import SEARCH_PROMPT
+    from prompts.supervisor_prompt import SUPERVISOR_PROMPT
 from pydantic import BaseModel, Field
 
 # Configure logging (set to logging.WARNING to turn off info logs)

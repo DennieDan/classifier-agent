@@ -1,15 +1,27 @@
-from constants import get_local_ollama_llm
+try:
+    from app.constants import get_local_ollama_llm
+    from app.prompts.supervisor_prompt_tools import SUPERVISOR_PROMPT
+    from app.tools.agent_tools import (
+        evaluate_search_results,
+        get_best_confidence_score_and_compare_with_threshold,
+        identify_primary_function,
+    )
+    from app.tools.regulatory_server import get_regulatory_rules, search_stcced_pdf
+except ImportError:
+    # Fallback for running this module from within `app/`
+    from constants import get_local_ollama_llm
+    from prompts.supervisor_prompt_tools import SUPERVISOR_PROMPT
+    from tools.agent_tools import (
+        evaluate_search_results,
+        get_best_confidence_score_and_compare_with_threshold,
+        identify_primary_function,
+    )
+    from tools.regulatory_server import get_regulatory_rules, search_stcced_pdf
+
 from langchain.agents import create_react_agent
 
 # from langchain.agents import AgentExecutor, create_react_agent
 from langchain_core.prompts import PromptTemplate
-from prompts.supervisor_prompt_tools import SUPERVISOR_PROMPT
-from tools.agent_tools import (
-    evaluate_search_results,
-    get_best_confidence_score_and_compare_with_threshold,
-    identify_primary_function,
-)
-from tools.regulatory_server import get_regulatory_rules, search_stcced_pdf
 
 
 async def setup_agent():

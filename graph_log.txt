@@ -4710,3 +4710,35 @@ Stack (most recent call last):
 2026-03-25 23:59:21,997 - INFO - Load pretrained SentenceTransformer: BAAI/bge-small-en-v1.5
 2026-03-25 23:59:26,033 - INFO - 1 prompt is loaded, with the key: query
 2026-03-25 23:59:26,074 - INFO - Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+2026-03-26 10:32:49,908 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-26 10:32:49,969 - INFO - Load pretrained SentenceTransformer: BAAI/bge-small-en-v1.5
+2026-03-26 10:32:53,881 - INFO - 1 prompt is loaded, with the key: query
+2026-03-26 10:32:53,912 - INFO - Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+2026-03-26 10:32:56,270 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-26 10:32:56,589 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-26 10:32:56,595 - INFO - --- [Identify Primary Function] Item: salmon from japan ---
+2026-03-26 10:32:56,844 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-26 10:32:56,848 - INFO - --- [Identify Primary Function] Response: content='The primary function of the item "salmon from Japan" is "Food".' additional_kwargs={} response_metadata={'token_usage': {'completion_tokens': 17, 'prompt_tokens': 204, 'total_tokens': 221, 'completion_time': 0.047929367, 'completion_tokens_details': None, 'prompt_time': 0.020644625, 'prompt_tokens_details': None, 'queue_time': 0.049623864, 'total_time': 0.068573992}, 'model_name': 'llama-3.3-70b-versatile', 'system_fingerprint': 'fp_68f543a7cc', 'service_tier': 'on_demand', 'finish_reason': 'stop', 'logprobs': None, 'model_provider': 'groq'} id='lc_run--019d27fc-de3d-7431-b0a7-0924f357f806-0' tool_calls=[] invalid_tool_calls=[] usage_metadata={'input_tokens': 204, 'output_tokens': 17, 'total_tokens': 221} ---
+2026-03-26 10:32:57,121 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-26 10:32:57,128 - INFO - --- [Evaluate Search Results] Input: salmon from japan, Primary Function: Food ---
+2026-03-26 10:32:57,714 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-26 10:32:57,718 - INFO - --- [Evaluate Search Results] Response: evaluation=[EvaluationItem(search_result='Salmon from Japan falls under Chapter 03, which covers fish and crustaceans, and more specifically under Heading 03.02, which covers frozen fish', reasoning='The search result is highly related to the primary function of the item, which is food. The result provides specific headings and subheadings, and covers small assorted information about the origin of the salmon', confidence_score=1.0)] ---
+2026-03-26 10:32:58,060 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-26 10:32:58,356 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-26 11:32:50,925 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-26 11:32:50,943 - INFO - --- [Identify Primary Function] Item: chewing gum ---
+2026-03-26 11:32:51,248 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-26 11:32:51,252 - INFO - --- [Identify Primary Function] Response: content='The primary function of the item "chewing gum" is "Oral hygiene and breath freshening tool" or more simply, "Dental chew".' additional_kwargs={} response_metadata={'token_usage': {'completion_tokens': 32, 'prompt_tokens': 203, 'total_tokens': 235, 'completion_time': 0.125133551, 'completion_tokens_details': None, 'prompt_time': 0.01118131, 'prompt_tokens_details': None, 'queue_time': 0.04848515, 'total_time': 0.136314861}, 'model_name': 'llama-3.3-70b-versatile', 'system_fingerprint': 'fp_68f543a7cc', 'service_tier': 'on_demand', 'finish_reason': 'stop', 'logprobs': None, 'model_provider': 'groq'} id='lc_run--019d2833-b69e-70a3-8adb-e16108e5fddf-0' tool_calls=[] invalid_tool_calls=[] usage_metadata={'input_tokens': 203, 'output_tokens': 32, 'total_tokens': 235} ---
+2026-03-26 11:32:51,688 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-26 11:32:51,739 - INFO - Load pretrained SentenceTransformer: BAAI/bge-small-en-v1.5
+2026-03-26 11:32:55,724 - INFO - 1 prompt is loaded, with the key: query
+2026-03-26 11:32:55,766 - INFO - Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+2026-03-26 11:33:01,713 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-26 11:33:02,175 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-26 11:33:02,182 - INFO - --- [Evaluate Search Results] Input: chewing gum, Primary Function: Dental chew ---
+2026-03-26 11:33:02,880 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-26 11:33:02,883 - INFO - --- [Evaluate Search Results] Response: evaluation=[EvaluationItem(search_result='Chewing gum is classified under Chapter 30 - Pharmaceutical products, Heading 30.06, as it is considered a dental chew product.', reasoning='The search result is highly related to the primary function of the item, which is dental chew. The result provides a specific heading and chapter, demonstrating good reasoning. However, it does not cover small assorted information or features of the user input.', confidence_score=1.0)] ---
+2026-03-26 11:33:03,514 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-26 11:33:03,828 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-26 11:33:04,229 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-26 11:33:04,540 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"

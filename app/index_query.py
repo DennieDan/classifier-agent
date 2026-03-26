@@ -4,7 +4,11 @@ from typing import Optional
 
 import chromadb
 import httpx
-from constants import CHROMA_PATH, EMBED_MODEL
+try:
+    from app.constants import CHROMA_PATH, EMBED_MODEL
+except ImportError:
+    # Running with app/ on sys.path (e.g. regulatory_server, python app/index_server.py cwd quirks)
+    from constants import CHROMA_PATH, EMBED_MODEL
 from dotenv import load_dotenv
 from llama_index.core import Settings, VectorStoreIndex
 from llama_index.core.response_synthesizers import ResponseMode
