@@ -1,7 +1,15 @@
 # Autonomous Regulatory Auditor Agent
 
-![Mainpage](docs/input.png)
 ![ChainofThought](docs/cot.png)
+
+Try out the Classifier Agent UI here: https://classifier-agent.onrender.com/ui/
+
+**Suggested Questions**
+
+1. What is the HS-Code of Coconut Candy with rice paper wrapper?
+2. What is the HS-Code of gold necklace with a silver pendant?
+
+Feel free to give more complex descriptions to test the agent's limit.
 
 https://github.com/user-attachments/assets/ab5e326f-c736-408b-b9ac-30b2c7676590
 
