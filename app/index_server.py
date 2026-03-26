@@ -43,7 +43,7 @@ storage_context = StorageContext.from_defaults(vector_store=vector_store)
 
 
 # Prepare documents
-docs = SimpleDirectoryReader(input_files=["./docs.md"]).load_data()
+docs = SimpleDirectoryReader(input_files=[PARSED_DOCS_PATH]).load_data()
 
 print("Building Index (this may take time)...")
 start_time = time.time()

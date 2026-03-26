@@ -55,7 +55,9 @@ parser = LlamaParse(
 )
 docs = parser.load_data(PDF_PATH)
 
-with open("docs.md", "w") as f:
+DOCS_MD_OUTPUT_PATH = os.path.join("/tmp", "docs.md")
+
+with open(DOCS_MD_OUTPUT_PATH, "w") as f:
     f.write(str(docs))
 
 print("Building Index (this may take time)...")
