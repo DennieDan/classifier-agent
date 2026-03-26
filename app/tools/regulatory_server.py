@@ -9,7 +9,15 @@ if str(_app) not in sys.path:
 
 from index_query import IndexQuery
 
-index_query = IndexQuery()
+_index_query: IndexQuery | None = None
+
+
+def _get_index_query() -> IndexQuery:
+    """Lazy init so import (and uvicorn bind) is not blocked by HF embed + Chroma load."""
+    global _index_query
+    if _index_query is None:
+        _index_query = IndexQuery()
+    return _index_query
 
 
 def get_regulatory_rules(rule_number: str = "all") -> str:
@@ -22,7 +30,7 @@ def get_regulatory_rules(rule_number: str = "all") -> str:
         query = "List and explain all General Interpretative Rules (GIR) 1 through 6."
 
     # Calls your existing RAG logic
-    return index_query.index_query(query=query)
+    return _get_index_query().index_query(query=query)
 
 
 def search_stcced_pdf(query: str) -> str:
@@ -37,4 +45,4 @@ def search_stcced_pdf(query: str) -> str:
     Returns:
         The search results.
     """
-    return index_query.index_query(query=query)
+    return _get_index_query().index_query(query=query)
